@@ -1,6 +1,12 @@
 import * as compatibility from "../protyle/util/compatibility";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+import {Constants} from "../constants";
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 import {Constants} from "../constants";
 /// #endif
 export const openByMobile = compatibility.openByMobile;
@@ -65,6 +71,7 @@ export const sendNotification = (options: {
             resolve(-1);
         }
         /// #else
+        /// #if !TAURI
         const timeoutId = window.setTimeout(() => {
             ipcRenderer.send(Constants.SIYUAN_CMD, {
                 cmd: "notification",
@@ -74,6 +81,18 @@ export const sendNotification = (options: {
             });
         }, delayInSeconds * 1000);
         resolve(timeoutId);
+        /// #endif
+        /// #if TAURI
+        const timeoutId = window.setTimeout(() => {
+            send(Constants.SIYUAN_CMD, {
+                cmd: "notification",
+                title,
+                body,
+                timeoutType: options.timeoutType || "default"
+            });
+        }, delayInSeconds * 1000);
+        resolve(timeoutId);
+        /// #endif
         /// #endif
     });
 };

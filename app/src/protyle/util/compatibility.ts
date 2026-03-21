@@ -2,7 +2,12 @@ import {focusByRange} from "./selection";
 import {fetchPost, fetchSyncPost} from "../../util/fetch";
 import {Constants} from "../../constants";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {invokeHandler} from "../../tauri/bridge";
 /// #endif
 /// #if MOBILE
 import {processSYLink} from "../../editor/openLink";
@@ -133,10 +138,18 @@ export const getLocalFiles = async () => {
     // 不再支持 PC 浏览器 https://github.com/siyuan-note/siyuan/issues/7206
     let localFiles: ILocalFiles[] = [];
     if ("darwin" === window.siyuan.config.system.os) {
+        /// #if !TAURI
         const xmlString = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
             cmd: "clipboardRead",
             format: "NSFilenamesPboardType",
         });
+        /// #endif
+        /// #if TAURI
+        const xmlString = await invokeHandler(Constants.SIYUAN_GET, {
+            cmd: "clipboardRead",
+            format: "NSFilenamesPboardType",
+        });
+        /// #endif
         if (xmlString) {
             const domParser = new DOMParser();
             const xmlDom = domParser.parseFromString(xmlString, "application/xml");
@@ -581,6 +594,7 @@ export const setStorageVal = (key: string, val: any, cb?: () => void) => {
 };
 
 /// #if !BROWSER
+/// #if !TAURI
 export const initNativeDialogOverride = () => {
     const originalAlert = window.alert;
     const originalConfirm = window.confirm;
@@ -615,5 +629,6 @@ export const initNativeDialogOverride = () => {
         }
     };
 };
+/// #endif
 /// #endif
 

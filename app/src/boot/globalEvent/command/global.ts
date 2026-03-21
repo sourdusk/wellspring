@@ -29,7 +29,12 @@ import {openSetting} from "../../../config";
 import {Tab} from "../../../layout/Tab";
 /// #endif
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../../../tauri/bridge";
 /// #endif
 import {App} from "../../../index";
 import {Constants} from "../../../constants";
@@ -241,8 +246,14 @@ export const globalCommand = (command: string, app: App) => {
             return true;
         case "toggleWin":
             /// #if !BROWSER
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, "hide");
             ipcRenderer.send(Constants.SIYUAN_CMD, "minimize");
+            /// #endif
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, "hide");
+            send(Constants.SIYUAN_CMD, "minimize");
             /// #endif
             return true;
     }

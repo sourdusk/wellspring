@@ -1,6 +1,11 @@
 import {getAllModels} from "../layout/getAll";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send, invokeHandler} from "../tauri/bridge";
 /// #endif
 import {setInlineStyle} from "../util/assets";
 import {fetchPost} from "../util/fetch";
@@ -400,9 +405,16 @@ export const editor = {
     },
     bindEvent: async () => {
         /// #if !BROWSER
+        /// #if !TAURI
         const languages: string[] = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
             cmd: "availableSpellCheckerLanguages",
         });
+        /// #endif
+        /// #if TAURI
+        const languages: string[] = await invokeHandler(Constants.SIYUAN_GET, {
+            cmd: "availableSpellCheckerLanguages",
+        });
+        /// #endif
         let spellcheckLanguagesHTML = "";
         languages.forEach(item => {
             spellcheckLanguagesHTML += `<div class="fn__pointer b3-chip b3-chip--middle${window.siyuan.config.editor.spellcheckLanguages.includes(item) ? " b3-chip--current" : ""}">${item}</div>`;
@@ -413,10 +425,18 @@ export const editor = {
             const target = event.target as Element;
             if (target.classList.contains("b3-chip")) {
                 target.classList.toggle("b3-chip--current");
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, {
                     cmd: "setSpellCheckerLanguages",
                     languages: Array.from(spellcheckLanguagesElement.querySelectorAll(".b3-chip--current")).map(item => item.textContent)
                 });
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, {
+                    cmd: "setSpellCheckerLanguages",
+                    languages: Array.from(spellcheckLanguagesElement.querySelectorAll(".b3-chip--current")).map(item => item.textContent)
+                });
+                /// #endif
                 setEditor();
             }
         });

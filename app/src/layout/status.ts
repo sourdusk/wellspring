@@ -4,7 +4,12 @@ import {hasClosestByClassName} from "../protyle/util/hasClosest";
 import {fetchPost} from "../util/fetch";
 import {mountHelp} from "../util/mount";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 /// #endif
 import {MenuItem} from "../menus/Menu";
@@ -88,7 +93,12 @@ export const initStatus = (isWindow = false) => {
                     label: window.siyuan.languages.debug,
                     icon: "iconBug",
                     click: () => {
+                        /// #if !TAURI
                         ipcRenderer.send(Constants.SIYUAN_CMD, "openDevTools");
+                        /// #endif
+                        /// #if TAURI
+                        send(Constants.SIYUAN_CMD, "openDevTools");
+                        /// #endif
                     }
                 }).element);
                 /// #endif

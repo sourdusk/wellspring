@@ -2,7 +2,12 @@ import {Constants} from "../../constants";
 import {fetchPost} from "../../util/fetch";
 /// #if !BROWSER
 import {sendGlobalShortcut} from "./keydown";
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../../tauri/bridge";
 /// #endif
 import {App} from "../../index";
 import {isMac, isNotCtrl, isOnlyMeta} from "../../protyle/util/compatibility";
@@ -12,7 +17,15 @@ const matchKeymap = (keymap: Config.IKeys, key1: "general" | "editor", key2?: "g
     if (key1 === "general") {
         if (!window.siyuan.config.keymap[key1]) {
             /// #if !BROWSER
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, {
+                cmd: "writeLog",
+                msg: "window.siyuan.config.keymap.general is not found"
+            });
+            /// #endif
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, {
                 cmd: "writeLog",
                 msg: "window.siyuan.config.keymap.general is not found"
             });
@@ -23,7 +36,15 @@ const matchKeymap = (keymap: Config.IKeys, key1: "general" | "editor", key2?: "g
     } else {
         if (!window.siyuan.config.keymap[key1]) {
             /// #if !BROWSER
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, {
+                cmd: "writeLog",
+                msg: "window.siyuan.config.keymap.editor is not found"
+            });
+            /// #endif
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, {
                 cmd: "writeLog",
                 msg: "window.siyuan.config.keymap.editor is not found"
             });
@@ -33,7 +54,15 @@ const matchKeymap = (keymap: Config.IKeys, key1: "general" | "editor", key2?: "g
         }
         if (!window.siyuan.config.keymap[key1][key2]) {
             /// #if !BROWSER
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, {
+                cmd: "writeLog",
+                msg: `window.siyuan.config.keymap.editor.${key2} is not found`
+            });
+            /// #endif
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, {
                 cmd: "writeLog",
                 msg: `window.siyuan.config.keymap.editor.${key2} is not found`
             });
@@ -47,7 +76,15 @@ const matchKeymap = (keymap: Config.IKeys, key1: "general" | "editor", key2?: "g
         if (key1 === "general") {
             if (!window.siyuan.config.keymap[key1][key] || window.siyuan.config.keymap[key1][key].default !== keymap[key].default) {
                 /// #if !BROWSER
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, {
+                    cmd: "writeLog",
+                    msg: `window.siyuan.config.keymap.${key1}.${key} is not found or match: ${window.siyuan.config.keymap[key1][key]?.default}`
+                });
+                /// #endif
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, {
                     cmd: "writeLog",
                     msg: `window.siyuan.config.keymap.${key1}.${key} is not found or match: ${window.siyuan.config.keymap[key1][key]?.default}`
                 });
@@ -58,7 +95,15 @@ const matchKeymap = (keymap: Config.IKeys, key1: "general" | "editor", key2?: "g
         } else {
             if (!window.siyuan.config.keymap[key1][key2][key] || window.siyuan.config.keymap[key1][key2][key].default !== keymap[key].default) {
                 /// #if !BROWSER
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, {
+                    cmd: "writeLog",
+                    msg: `window.siyuan.config.keymap.${key1}.${key2}.${key} is not found or match: ${window.siyuan.config.keymap[key1][key2][key]?.default}`
+                });
+                /// #endif
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, {
                     cmd: "writeLog",
                     msg: `window.siyuan.config.keymap.${key1}.${key2}.${key} is not found or match: ${window.siyuan.config.keymap[key1][key2][key]?.default}`
                 });
@@ -113,7 +158,15 @@ export const correctHotkey = (app: App) => {
         (!matchKeymap1 || !matchKeymap2 || !matchKeymap3 || !matchKeymap4 || !matchKeymap5 || !matchKeymap6 ||
             !hasKeymap1 || !hasKeymap2 || !hasKeymap3 || !hasKeymap4 || !hasKeymap5 || !hasKeymap6)) {
         /// #if !BROWSER
+        /// #if !TAURI
         ipcRenderer.send(Constants.SIYUAN_CMD, {
+            cmd: "writeLog",
+            msg: "update keymap"
+        });
+        /// #endif
+        /// #endif
+        /// #if TAURI
+        send(Constants.SIYUAN_CMD, {
             cmd: "writeLog",
             msg: "update keymap"
         });

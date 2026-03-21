@@ -28,7 +28,9 @@ import {insertAttrViewBlockAnimation} from "../render/av/row";
 import * as dayjs from "dayjs";
 import {setFold, zoomOut} from "../../menus/protyle";
 /// #if !BROWSER
+/// #if !TAURI
 import {webUtils} from "electron";
+/// #endif
 import {dragUpload} from "../render/av/asset";
 /// #else
 import {uploadFiles} from "../upload";
@@ -1157,6 +1159,7 @@ export const dropEvent = (protyle: IProtyle, editorElement: HTMLElement) => {
             if (!avElement) {
                 focusByRange(getRangeByPoint(event.clientX, event.clientY));
                 if (event.dataTransfer.types[0] === "Files" && !isBrowser()) {
+                    /// #if !TAURI
                     const files: ILocalFiles[] = [];
                     for (let i = 0; i < event.dataTransfer.files.length; i++) {
                         files.push({
@@ -1165,6 +1168,7 @@ export const dropEvent = (protyle: IProtyle, editorElement: HTMLElement) => {
                         });
                     }
                     uploadLocalFiles(files, protyle, !event.altKey);
+                    /// #endif
                 } else {
                     paste(protyle, event);
                 }
@@ -1174,6 +1178,7 @@ export const dropEvent = (protyle: IProtyle, editorElement: HTMLElement) => {
                 if (cellElement) {
                     if (getTypeByCellElement(cellElement) === "mAsset" && event.dataTransfer.types[0] === "Files") {
                         /// #if !BROWSER
+                        /// #if !TAURI
                         const files: ILocalFiles[] = [];
                         for (let i = 0; i < event.dataTransfer.files.length; i++) {
                             files.push({
@@ -1182,7 +1187,9 @@ export const dropEvent = (protyle: IProtyle, editorElement: HTMLElement) => {
                             });
                         }
                         dragUpload(files, protyle, cellElement);
-                        /// #else
+                        /// #endif
+                        /// #endif
+                        /// #if BROWSER
                         focusBlock(hasClosestBlock(cellElement) as HTMLElement);
                         uploadFiles(protyle, event.dataTransfer.files, undefined);
                         /// #endif

@@ -7,7 +7,12 @@ import {initFileMenu, initNavigationMenu} from "./navigation";
 import {initTabMenu} from "./tab";
 /// #endif
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import {Menu} from "./Menu";
 import {hasClosestByClassName, hasTopClosestByTag} from "../protyle/util/hasClosest";
@@ -35,6 +40,7 @@ export class Menus {
             }
             if (target.classList.contains("b3-text-field") || (target.tagName === "INPUT" && (target as HTMLInputElement).type === "text")) {
                 /// #if !BROWSER
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CONTEXT_MENU, {
                     undo: window.siyuan.languages.undo,
                     redo: window.siyuan.languages.redo,
@@ -45,6 +51,19 @@ export class Menus {
                     pasteAsPlainText: window.siyuan.languages.pasteAsPlainText,
                     selectAll: window.siyuan.languages.selectAll,
                 });
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CONTEXT_MENU, {
+                    undo: window.siyuan.languages.undo,
+                    redo: window.siyuan.languages.redo,
+                    copy: window.siyuan.languages.copy,
+                    cut: window.siyuan.languages.cut,
+                    delete: window.siyuan.languages.delete,
+                    paste: window.siyuan.languages.paste,
+                    pasteAsPlainText: window.siyuan.languages.pasteAsPlainText,
+                    selectAll: window.siyuan.languages.selectAll,
+                });
+                /// #endif
                 /// #endif
                 event.stopPropagation();
             } else {

@@ -1,5 +1,10 @@
 /// #if !BROWSER
+/// #if !TAURI
 import {shell} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {open} from "@tauri-apps/plugin-opener";
 /// #endif
 import {confirmDialog} from "../dialog/confirmDialog";
 import {getSearch, isMobile, isValidCustomAttrName} from "../util/functions";
@@ -934,9 +939,16 @@ export const openMenu = (app: App, src: string, onlyMenu: boolean, showAccelerat
             label: window.siyuan.languages.useDefault,
             accelerator: showAccelerator ? window.siyuan.languages.click : "",
             click: () => {
+                /// #if !TAURI
                 shell.openExternal(src).catch((e) => {
                     showMessage(e);
                 });
+                /// #endif
+                /// #if TAURI
+                open(src).catch((e) => {
+                    showMessage(e);
+                });
+                /// #endif
             }
         });
         /// #else

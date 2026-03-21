@@ -23,8 +23,13 @@ import {
 } from "../protyle/util/hasClosest";
 import {Constants} from "../constants";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer, webFrame} from "electron";
+/// #endif
 import {setModelsHash, setTabPosition} from "../window/setHeader";
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import {Search} from "../search";
 import {showMessage} from "../dialog/message";
@@ -263,10 +268,20 @@ export class Wnd {
                 if (wnd instanceof Wnd) {
                     JSONToCenter(app, tabData, wnd);
                     oldTab = wnd.children[wnd.children.length - 1];
+                    /// #if !TAURI
                     ipcRenderer.send(Constants.SIYUAN_SEND_WINDOWS, {cmd: "closetab", data: tabData.id});
+                    /// #endif
+                    /// #if TAURI
+                    send(Constants.SIYUAN_SEND_WINDOWS, {cmd: "closetab", data: tabData.id});
+                    /// #endif
                     it.querySelector("li[data-clone='true']").remove();
                     wnd.switchTab(oldTab.headElement);
+                    /// #if !TAURI
                     ipcRenderer.send(Constants.SIYUAN_CMD, "focus");
+                    /// #endif
+                    /// #if TAURI
+                    send(Constants.SIYUAN_CMD, "focus");
+                    /// #endif
                 }
             }
             /// #endif
@@ -369,8 +384,14 @@ export class Wnd {
                         return true;
                     }
                 });
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_SEND_WINDOWS, {cmd: "closetab", data: tabData.id});
                 ipcRenderer.send(Constants.SIYUAN_CMD, "focus");
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_SEND_WINDOWS, {cmd: "closetab", data: tabData.id});
+                send(Constants.SIYUAN_CMD, "focus");
+                /// #endif
             }
             /// #endif
             if (!oldTab) {
@@ -888,8 +909,13 @@ export class Wnd {
             saveLayout();
         }
         /// #if !BROWSER
+        /// #if !TAURI
         webFrame.clearCache();
         ipcRenderer.send(Constants.SIYUAN_CMD, "clearCache");
+        /// #endif
+        /// #if TAURI
+        send(Constants.SIYUAN_CMD, "clearCache");
+        /// #endif
         setTabPosition();
         setModelsHash();
         /// #endif

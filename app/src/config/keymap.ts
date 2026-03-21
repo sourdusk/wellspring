@@ -6,8 +6,13 @@ import {exportLayout} from "../layout/util";
 import {confirmDialog} from "../dialog/confirmDialog";
 import {App} from "../index";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
 import {sendUnregisterGlobalShortcut} from "../boot/globalEvent/keydown";
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import {sendGlobalShortcut} from "../boot/globalEvent/keydown";
 
@@ -225,10 +230,18 @@ export const keymap = {
                             if (command.langKey === keys[2]) {
                                 /// #if !BROWSER
                                 if (command.globalCallback && command.customHotkey && command.customHotkey !== newHotkey) {
+                                    /// #if !TAURI
                                     ipcRenderer.send(Constants.SIYUAN_CMD, {
                                         cmd: "unregisterGlobalShortcut",
                                         accelerator: command.customHotkey
                                     });
+                                    /// #endif
+                                    /// #if TAURI
+                                    send(Constants.SIYUAN_CMD, {
+                                        cmd: "unregisterGlobalShortcut",
+                                        accelerator: command.customHotkey
+                                    });
+                                    /// #endif
                                 }
                                 /// #endif
                                 command.customHotkey = newHotkey;
@@ -247,6 +260,7 @@ export const keymap = {
             data
         }, () => {
             /// #if !BROWSER
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, {
                 cmd: "writeLog",
                 msg: "user update keymap:" + JSON.stringify(window.siyuan.config.keymap)
@@ -257,6 +271,19 @@ export const keymap = {
                     accelerator: oldToggleWin
                 });
             }
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, {
+                cmd: "writeLog",
+                msg: "user update keymap:" + JSON.stringify(window.siyuan.config.keymap)
+            });
+            if (oldToggleWin !== window.siyuan.config.keymap.general.toggleWin.custom) {
+                send(Constants.SIYUAN_CMD, {
+                    cmd: "unregisterGlobalShortcut",
+                    accelerator: oldToggleWin
+                });
+            }
+            /// #endif
             sendGlobalShortcut(app);
             /// #endif
         });
@@ -379,6 +406,7 @@ export const keymap = {
                     data: Constants.SIYUAN_KEYMAP,
                 }, () => {
                     /// #if !BROWSER
+                    /// #if !TAURI
                     ipcRenderer.send(Constants.SIYUAN_CMD, {
                         cmd: "writeLog",
                         msg: "user reset keymap"
@@ -389,6 +417,19 @@ export const keymap = {
                             accelerator: window.siyuan.config.keymap.general.toggleWin.custom
                         });
                     }
+                    /// #endif
+                    /// #if TAURI
+                    send(Constants.SIYUAN_CMD, {
+                        cmd: "writeLog",
+                        msg: "user reset keymap"
+                    });
+                    if (window.siyuan.config.keymap.general.toggleWin.default !== window.siyuan.config.keymap.general.toggleWin.custom) {
+                        send(Constants.SIYUAN_CMD, {
+                            cmd: "unregisterGlobalShortcut",
+                            accelerator: window.siyuan.config.keymap.general.toggleWin.custom
+                        });
+                    }
+                    /// #endif
                     sendGlobalShortcut(app);
                     /// #endif
                     window.location.reload();

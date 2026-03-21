@@ -14,7 +14,12 @@ import {escapeHtml} from "../util/escape";
 import {openFile} from "../editor/util";
 /// #endif
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import * as dayjs from "dayjs";
 import {getDisplayName, movePathTo} from "../util/pathName";
@@ -569,10 +574,18 @@ export const bindCardEvent = async (options: {
                                 }
                             }
                         }];
+                        /// #if !TAURI
                         ipcRenderer.send(Constants.SIYUAN_OPEN_WINDOW, {
                             // 需要 encode， 否则 https://github.com/siyuan-note/siyuan/issues/9343
                             url: `${window.location.protocol}//${window.location.host}/stage/build/app/window.html?v=${Constants.SIYUAN_VERSION}&json=${encodeURIComponent(JSON.stringify(json))}`
                         });
+                        /// #endif
+                        /// #if TAURI
+                        send(Constants.SIYUAN_OPEN_WINDOW, {
+                            // 需要 encode， 否则 https://github.com/siyuan-note/siyuan/issues/9343
+                            url: `${window.location.protocol}//${window.location.host}/stage/build/app/window.html?v=${Constants.SIYUAN_VERSION}&json=${encodeURIComponent(JSON.stringify(json))}`
+                        });
+                        /// #endif
                         options.dialog.destroy();
                     }
                 });

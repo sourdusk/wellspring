@@ -14,7 +14,12 @@ import {openSetting} from "../config";
 import {openSearch} from "../search/spread";
 import {App} from "../index";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer, webFrame} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import {Constants} from "../constants";
 import {isBrowser, isWindow} from "../util/functions";
@@ -286,12 +291,21 @@ export const setZoom = (type: "zoomIn" | "zoomOut" | "restore") => {
         });
     }
 
+    /// #if !TAURI
     webFrame.setZoomFactor(zoom);
     ipcRenderer.send(Constants.SIYUAN_CMD, {
         cmd: "setTrafficLightPosition",
         zoom,
         position: Constants.SIZE_ZOOM.find((item) => item.zoom === zoom).position
     });
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_CMD, {
+        cmd: "setTrafficLightPosition",
+        zoom,
+        position: Constants.SIZE_ZOOM.find((item) => item.zoom === zoom).position
+    });
+    /// #endif
     window.siyuan.storage[Constants.LOCAL_ZOOM] = zoom;
     setStorageVal(Constants.LOCAL_ZOOM, zoom);
     if (!isWindow()) {

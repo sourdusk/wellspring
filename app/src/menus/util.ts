@@ -1,6 +1,11 @@
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
 import * as path from "path";
+/// #endif
+/// #if TAURI
+import {invokeHandler} from "../tauri/bridge";
 /// #endif
 import {fetchPost} from "../util/fetch";
 import {getAssetName, pathPosix, useShell} from "../util/pathName";
@@ -22,11 +27,20 @@ export const exportAsset = (src: string) => {
             /// #if BROWSER
             exportByMobile(src);
             /// #else
+            /// #if !TAURI
             const result = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
                 cmd: "showSaveDialog",
                 defaultPath: getAssetName(src) + pathPosix().extname(src),
                 properties: ["showOverwriteConfirmation"],
             });
+            /// #endif
+            /// #if TAURI
+            const result = await invokeHandler(Constants.SIYUAN_GET, {
+                cmd: "showSaveDialog",
+                defaultPath: getAssetName(src) + pathPosix().extname(src),
+                properties: ["showOverwriteConfirmation"],
+            });
+            /// #endif
             if (!result.canceled) {
                 fetchPost("/api/file/copyFile", {src, dest: result.filePath}, (response) => {
                     if (response.code === 0) {

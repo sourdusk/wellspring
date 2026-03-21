@@ -1,10 +1,15 @@
 import {hideMessage, showMessage} from "../../dialog/message";
 import {Constants} from "../../constants";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
 import * as fs from "fs";
 import * as path from "path";
 import {afterExport} from "./util";
+/// #endif
+/// #if TAURI
+import {send, invokeHandler} from "../../tauri/bridge";
 /// #endif
 import {confirmDialog} from "../../dialog/confirmDialog";
 import {getThemeMode, setInlineStyle} from "../../util/assets";
@@ -147,9 +152,16 @@ const renderPDF = async (id: string) => {
     if (!isDefault) {
         themeStyle = `<link rel="stylesheet" type="text/css" id="themeStyle" href="${servePath}appearance/themes/${window.siyuan.config.appearance.themeLight}/theme.css?${Constants.SIYUAN_VERSION}"/>`;
     }
+    /// #if !TAURI
     const currentWindowId = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
         cmd: "getContentsId",
     });
+    /// #endif
+    /// #if TAURI
+    const currentWindowId = await invokeHandler(Constants.SIYUAN_GET, {
+        cmd: "getContentsId",
+    });
+    /// #endif
     // data-theme-mode="light" https://github.com/siyuan-note/siyuan/issues/7379
     const html = `<!DOCTYPE html>
 <html lang="${window.siyuan.config.appearance.lang}" data-theme-mode="light" data-light-theme="${window.siyuan.config.appearance.themeLight}" data-dark-theme="${window.siyuan.config.appearance.themeDark}">
@@ -683,7 +695,12 @@ ${getIconScript(servePath)}
 ${getSnippetJS()}
 </body></html>`;
     fetchPost("/api/export/exportTempContent", {content: html}, (response) => {
+        /// #if !TAURI
         ipcRenderer.send(Constants.SIYUAN_EXPORT_NEWWINDOW, response.data.url);
+        /// #endif
+        /// #if TAURI
+        send(Constants.SIYUAN_EXPORT_NEWWINDOW, response.data.url);
+        /// #endif
     });
 };
 
@@ -708,11 +725,20 @@ const getExportPath = (option: IExportOptions, removeAssets?: boolean, mergeSubd
                 break;
         }
 
+        /// #if !TAURI
         const result = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
             cmd: "showOpenDialog",
             title: window.siyuan.languages.export + " " + exportType,
             properties: ["createDirectory", "openDirectory"],
         });
+        /// #endif
+        /// #if TAURI
+        const result = await invokeHandler(Constants.SIYUAN_GET, {
+            cmd: "showOpenDialog",
+            title: window.siyuan.languages.export + " " + exportType,
+            properties: ["createDirectory", "openDirectory"],
+        });
+        /// #endif
         if (!result.canceled) {
             const msgId = showMessage(window.siyuan.languages.exporting, -1);
             let url = "/api/export/exportHTML";

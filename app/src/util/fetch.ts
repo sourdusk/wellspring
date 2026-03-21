@@ -1,6 +1,11 @@
 import {Constants} from "../constants";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import {processMessage} from "./processMessage";
 import {kernelError} from "../dialog/processSystem";
@@ -107,10 +112,19 @@ export const fetchPost = (
             return;
         }
         /// #if !BROWSER
+        /// #if !TAURI
         if (url === "/api/system/exit" || url === "/api/system/setWorkspaceDir" || (
             ["/api/system/setUILayout"].includes(url) && data.errorExit // 内核中断，点关闭处理
         )) {
             ipcRenderer.send(Constants.SIYUAN_QUIT, location.port);
+        }
+        /// #endif
+        /// #endif
+        /// #if TAURI
+        if (url === "/api/system/exit" || url === "/api/system/setWorkspaceDir" || (
+            ["/api/system/setUILayout"].includes(url) && data.errorExit // 内核中断，点关闭处理
+        )) {
+            send(Constants.SIYUAN_QUIT, location.port);
         }
         /// #endif
     });

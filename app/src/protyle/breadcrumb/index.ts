@@ -18,7 +18,12 @@ import {openFileById} from "../../editor/util";
 import {saveLayout} from "../../layout/util";
 /// #endif
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {invokeHandler} from "../../tauri/bridge";
 /// #endif
 import {onGet} from "../util/onGet";
 import {hideElements} from "../ui/hideElements";
@@ -292,6 +297,7 @@ ${padHTML}
                         label: this.mediaRecorder?.isRecording ? window.siyuan.languages.endRecord : window.siyuan.languages.startRecord,
                         click: async () => {
                             /// #if !BROWSER
+                            /// #if !TAURI
                             if (window.siyuan.config.system.os === "darwin") {
                                 const status = await ipcRenderer.invoke(Constants.SIYUAN_GET, {cmd: "getMicrophone"});
                                 if (["denied", "restricted", "unknown"].includes(status)) {
@@ -299,6 +305,22 @@ ${padHTML}
                                     return;
                                 } else if (status === "not-determined") {
                                     const isAccess = await ipcRenderer.invoke(Constants.SIYUAN_GET, {cmd: "askMicrophone"});
+                                    if (!isAccess) {
+                                        showMessage(window.siyuan.languages.microphoneNotAccess);
+                                        return;
+                                    }
+                                }
+                            }
+                            /// #endif
+                            /// #endif
+                            /// #if TAURI
+                            if (window.siyuan.config.system.os === "darwin") {
+                                const status = await invokeHandler(Constants.SIYUAN_GET, {cmd: "getMicrophone"});
+                                if (["denied", "restricted", "unknown"].includes(status)) {
+                                    showMessage(window.siyuan.languages.microphoneDenied);
+                                    return;
+                                } else if (status === "not-determined") {
+                                    const isAccess = await invokeHandler(Constants.SIYUAN_GET, {cmd: "getMicrophone"});
                                     if (!isAccess) {
                                         showMessage(window.siyuan.languages.microphoneNotAccess);
                                         return;

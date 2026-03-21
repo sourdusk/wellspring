@@ -1,5 +1,12 @@
 import {Constants} from "../constants";
+/// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer, webFrame} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
+/// #endif
 import {fetchPost} from "../util/fetch";
 import {adjustLayout, getInstanceById, JSONToCenter} from "../layout/util";
 import {resizeTabs} from "../layout/tabUtil";
@@ -19,12 +26,22 @@ import {initNativeDialogOverride} from "../protyle/util/compatibility";
 /// #endif
 
 export const init = (app: App) => {
+    /// #if !TAURI
     webFrame.setZoomFactor(window.siyuan.storage[Constants.LOCAL_ZOOM]);
     ipcRenderer.send(Constants.SIYUAN_CMD, {
         cmd: "setTrafficLightPosition",
         zoom: window.siyuan.storage[Constants.LOCAL_ZOOM],
         position: Constants.SIZE_ZOOM.find((item) => item.zoom === window.siyuan.storage[Constants.LOCAL_ZOOM]).position
     });
+    /// #endif
+    /// #if TAURI
+    document.documentElement.style.setProperty("zoom", String(window.siyuan.storage[Constants.LOCAL_ZOOM]));
+    send(Constants.SIYUAN_CMD, {
+        cmd: "setTrafficLightPosition",
+        zoom: window.siyuan.storage[Constants.LOCAL_ZOOM],
+        position: Constants.SIZE_ZOOM.find((item) => item.zoom === window.siyuan.storage[Constants.LOCAL_ZOOM]).position
+    });
+    /// #endif
     initWindowEvent(app);
     fetchPost("/api/system/getEmojiConf", {}, response => {
         window.siyuan.emojis = response.data as IEmoji[];

@@ -1,6 +1,11 @@
 import {MenuItem} from "./Menu";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send, invokeHandler} from "../tauri/bridge";
 /// #endif
 import {openHistory} from "../history/history";
 import {getOpenNotebookCount, originalPath, pathPosix, useShell} from "../util/pathName";
@@ -196,11 +201,20 @@ export const workspaceMenu = (app: App, rect: DOMRect) => {
                 label: `${window.siyuan.languages.new} / ${window.siyuan.languages.openBy}`,
                 iconHTML: "",
                 click: async () => {
+                    /// #if !TAURI
                     const localPath = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
                         cmd: "showOpenDialog",
                         defaultPath: window.siyuan.config.system.homeDir,
                         properties: ["openDirectory", "createDirectory"],
                     });
+                    /// #endif
+                    /// #if TAURI
+                    const localPath = await invokeHandler(Constants.SIYUAN_GET, {
+                        cmd: "showOpenDialog",
+                        defaultPath: window.siyuan.config.system.homeDir,
+                        properties: ["openDirectory", "createDirectory"],
+                    });
+                    /// #endif
                     if (localPath.filePaths.length === 0) {
                         return;
                     }
@@ -569,7 +583,12 @@ export const workspaceMenu = (app: App, rect: DOMRect) => {
             label: window.siyuan.languages.debug,
             icon: "iconBug",
             click: () => {
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, "openDevTools");
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, "openDevTools");
+                /// #endif
             }
         }).element);
         /// #endif
@@ -600,10 +619,18 @@ const openWorkspace = (workspace: string) => {
     fetchPost("/api/system/setWorkspaceDir", {
         path: workspace
     }, () => {
+        /// #if !TAURI
         ipcRenderer.send(Constants.SIYUAN_OPEN_WORKSPACE, {
             workspace,
             lang: window.siyuan.config.appearance.lang
         });
+        /// #endif
+        /// #if TAURI
+        send(Constants.SIYUAN_OPEN_WORKSPACE, {
+            workspace,
+            lang: window.siyuan.config.appearance.lang
+        });
+        /// #endif
     });
     /// #endif
 };

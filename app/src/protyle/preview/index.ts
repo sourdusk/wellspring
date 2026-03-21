@@ -7,7 +7,12 @@ import {needSubscribe} from "../../util/needSubscribe";
 import {Constants} from "../../constants";
 import {getSearch, isMobile} from "../../util/functions";
 /// #if !BROWSER
+/// #if !TAURI
 import {shell} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {open} from "@tauri-apps/plugin-opener";
 /// #endif
 /// #if !MOBILE
 import {openAsset, openBy} from "../../editor/util";
@@ -105,10 +110,18 @@ export class Preview {
                         /// #endif
                     } else {
                         /// #if !BROWSER
+                        /// #if !TAURI
                         shell.openExternal(linkAddress).catch((e) => {
                             showMessage(e);
                         });
-                        /// #else
+                        /// #endif
+                        /// #endif
+                        /// #if TAURI
+                        open(linkAddress).catch((e) => {
+                            showMessage(e);
+                        });
+                        /// #endif
+                        /// #if BROWSER
                         window.open(linkAddress);
                         /// #endif
                     }

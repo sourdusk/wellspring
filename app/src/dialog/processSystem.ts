@@ -7,7 +7,12 @@ import {getAllEditor, getAllModels} from "../layout/getAll";
 import {getDockByType} from "../layout/tabUtil";
 import {Files} from "../layout/dock/Files";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import {hideMessage, showMessage} from "./message";
 import {Dialog} from "./index";
@@ -302,7 +307,12 @@ export const exitSiYuan = async (setCurrentWorkspace = true) => {
                 buttonElement.addEventListener("click", () => {
                     fetchPost("/api/system/exit", {force: true, setCurrentWorkspace}, () => {
                         /// #if !BROWSER
+                        /// #if !TAURI
                         ipcRenderer.send(Constants.SIYUAN_QUIT, location.port);
+                        /// #endif
+                        /// #if TAURI
+                        send(Constants.SIYUAN_QUIT, location.port);
+                        /// #endif
                         /// #else
                         if (isInAndroid()) {
                             window.JSAndroid.exit();
@@ -324,7 +334,12 @@ export const exitSiYuan = async (setCurrentWorkspace = true) => {
             hideMessage();
 
             if ("std" === window.siyuan.config.system.container) {
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_SHOW_WINDOW);
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_SHOW_WINDOW);
+                /// #endif
             }
 
             confirmDialog(window.siyuan.languages.updateVersion, response.msg, () => {
@@ -337,11 +352,21 @@ export const exitSiYuan = async (setCurrentWorkspace = true) => {
                     // 桌面端退出拉起更新安装时有时需要重启两次 https://github.com/siyuan-note/siyuan/issues/6544
                     // 这里先将主界面隐藏
                     setTimeout(() => {
+                        /// #if !TAURI
                         ipcRenderer.send(Constants.SIYUAN_CMD, "hide");
+                        /// #endif
+                        /// #if TAURI
+                        send(Constants.SIYUAN_CMD, "hide");
+                        /// #endif
                     }, 2000);
                     // 然后等待一段时间后再退出，避免界面主进程退出以后内核子进程被杀死
                     setTimeout(() => {
+                        /// #if !TAURI
                         ipcRenderer.send(Constants.SIYUAN_QUIT, location.port);
+                        /// #endif
+                        /// #if TAURI
+                        send(Constants.SIYUAN_QUIT, location.port);
+                        /// #endif
                     }, 4000);
                     /// #endif
                 });
@@ -352,13 +377,23 @@ export const exitSiYuan = async (setCurrentWorkspace = true) => {
                     execInstallPkg: 1 //  0：默认检查新版本，1：不执行新版本安装，2：执行新版本安装
                 }, () => {
                     /// #if !BROWSER
+                    /// #if !TAURI
                     ipcRenderer.send(Constants.SIYUAN_QUIT, location.port);
+                    /// #endif
+                    /// #if TAURI
+                    send(Constants.SIYUAN_QUIT, location.port);
+                    /// #endif
                     /// #endif
                 });
             });
         } else { // 正常退出
             /// #if !BROWSER
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_QUIT, location.port);
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_QUIT, location.port);
+            /// #endif
             /// #else
             if (isInAndroid()) {
                 window.JSAndroid.exit();

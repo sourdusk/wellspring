@@ -43,7 +43,12 @@ import {getNextFileLi, getPreviousFileLi} from "../../protyle/wysiwyg/getBlock";
 import {Backlink} from "../../layout/dock/Backlink";
 /// #if !BROWSER
 import {setZoom} from "../../layout/topBar";
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../../tauri/bridge";
 /// #endif
 import {openHistory} from "../../history/history";
 import {openCard, openCardByData} from "../../card/openCard";
@@ -1752,16 +1757,25 @@ export const sendGlobalShortcut = (app: App) => {
             }
         });
     });
+    /// #if !TAURI
     ipcRenderer.send(Constants.SIYUAN_HOTKEY, {
         languages: window.siyuan.languages["_trayMenu"],
         hotkeys
     });
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_HOTKEY, {
+        languages: window.siyuan.languages["_trayMenu"],
+        hotkeys
+    });
+    /// #endif
     /// #endif
 };
 
 
 export const sendUnregisterGlobalShortcut = (app: App) => {
     /// #if !BROWSER
+    /// #if !TAURI
     ipcRenderer.send(Constants.SIYUAN_CMD, {
         cmd: "unregisterGlobalShortcut",
         accelerator: window.siyuan.config.keymap.general.toggleWin.custom
@@ -1770,6 +1784,23 @@ export const sendUnregisterGlobalShortcut = (app: App) => {
         plugin.commands.forEach(command => {
             if (command.globalCallback) {
                 ipcRenderer.send(Constants.SIYUAN_CMD, {
+                    cmd: "unregisterGlobalShortcut",
+                    accelerator: command.customHotkey
+                });
+            }
+        });
+    });
+    /// #endif
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_CMD, {
+        cmd: "unregisterGlobalShortcut",
+        accelerator: window.siyuan.config.keymap.general.toggleWin.custom
+    });
+    app.plugins.forEach(plugin => {
+        plugin.commands.forEach(command => {
+            if (command.globalCallback) {
+                send(Constants.SIYUAN_CMD, {
                     cmd: "unregisterGlobalShortcut",
                     accelerator: command.customHotkey
                 });

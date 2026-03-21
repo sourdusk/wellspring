@@ -2,12 +2,17 @@ import {adjustLayout, exportLayout, JSONToLayout, resetLayout, resizeTopBar} fro
 import {resizeTabs} from "../layout/tabUtil";
 import {setStorageVal} from "../protyle/util/compatibility";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer, webFrame} from "electron";
 import * as fs from "fs";
 import * as path from "path";
+/// #endif
 import {afterExport} from "../protyle/export/util";
 import {onWindowsMsg} from "../window/onWindowsMsg";
 import {initNativeDialogOverride} from "../protyle/util/compatibility";
+/// #endif
+/// #if TAURI
+import {send, invokeHandler, on} from "../tauri/bridge";
 /// #endif
 import {Constants} from "../constants";
 import {appearance} from "../config/appearance";
@@ -35,6 +40,7 @@ import {getAllEditor} from "../layout/getAll";
 export const onGetConfig = (isStart: boolean, app: App) => {
     correctHotkey(app);
     /// #if !BROWSER
+    /// #if !TAURI
     ipcRenderer.invoke(Constants.SIYUAN_INIT, {
         languages: window.siyuan.languages["_trayMenu"],
         workspaceDir: window.siyuan.config.system.workspaceDir,
@@ -42,6 +48,20 @@ export const onGetConfig = (isStart: boolean, app: App) => {
     });
     webFrame.setZoomFactor(window.siyuan.storage[Constants.LOCAL_ZOOM]);
     ipcRenderer.send(Constants.SIYUAN_CMD, {
+        cmd: "setTrafficLightPosition",
+        zoom: window.siyuan.storage[Constants.LOCAL_ZOOM],
+        position: Constants.SIZE_ZOOM.find((item) => item.zoom === window.siyuan.storage[Constants.LOCAL_ZOOM]).position
+    });
+    /// #endif
+    /// #endif
+    /// #if TAURI
+    invokeHandler(Constants.SIYUAN_INIT, {
+        languages: window.siyuan.languages["_trayMenu"],
+        workspaceDir: window.siyuan.config.system.workspaceDir,
+        port: location.port
+    });
+    document.documentElement.style.setProperty("zoom", String(window.siyuan.storage[Constants.LOCAL_ZOOM]));
+    send(Constants.SIYUAN_CMD, {
         cmd: "setTrafficLightPosition",
         zoom: window.siyuan.storage[Constants.LOCAL_ZOOM],
         position: Constants.SIZE_ZOOM.find((item) => item.zoom === window.siyuan.storage[Constants.LOCAL_ZOOM]).position
@@ -104,21 +124,41 @@ export const onGetConfig = (isStart: boolean, app: App) => {
 
 export const initWindow = async (app: App) => {
     /// #if !BROWSER
+    /// #if !TAURI
     ipcRenderer.send(Constants.SIYUAN_CMD, {
         cmd: "setSpellCheckerLanguages",
         languages: window.siyuan.config.editor.spellcheckLanguages
     });
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_CMD, {
+        cmd: "setSpellCheckerLanguages",
+        languages: window.siyuan.config.editor.spellcheckLanguages
+    });
+    /// #endif
     const winOnClose = (close = false) => {
         exportLayout({
             cb() {
                 if (window.siyuan.config.appearance.closeButtonBehavior === 1 && !close) {
                     // 最小化
                     if ("windows" === window.siyuan.config.system.os) {
+                        /// #if !TAURI
                         ipcRenderer.send(Constants.SIYUAN_CONFIG_TRAY, {
                             languages: window.siyuan.languages["_trayMenu"],
                         });
+                        /// #endif
+                        /// #if TAURI
+                        send(Constants.SIYUAN_CONFIG_TRAY, {
+                            languages: window.siyuan.languages["_trayMenu"],
+                        });
+                        /// #endif
                     } else {
+                        /// #if !TAURI
                         ipcRenderer.send(Constants.SIYUAN_CMD, "closeButtonBehavior");
+                        /// #endif
+                        /// #if TAURI
+                        send(Constants.SIYUAN_CMD, "closeButtonBehavior");
+                        /// #endif
                     }
                 } else {
                     exitSiYuan();
@@ -128,7 +168,13 @@ export const initWindow = async (app: App) => {
         });
     };
 
+    /// #if !TAURI
     ipcRenderer.send(Constants.SIYUAN_EVENT);
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_EVENT);
+    /// #endif
+    /// #if !TAURI
     ipcRenderer.on(Constants.SIYUAN_EVENT, (event, cmd) => {
         if (cmd === "focus") {
             // 由于 https://github.com/siyuan-note/siyuan/issues/10060 和新版 electron 应用切出再切进会保持光标，故移除 focus
@@ -284,6 +330,73 @@ ${response.data.replace("%pages", "<span class=totalPages></span>").replace("%pa
         }
         ipcRenderer.send(Constants.SIYUAN_CMD, {cmd: "hide", webContentsId: ipcData.webContentsId});
     });
+    /// #endif
+    /// #if TAURI
+    on(Constants.SIYUAN_EVENT, (event, cmd) => {
+        if (cmd === "focus") {
+            window.siyuan.altIsPressed = false;
+            window.siyuan.ctrlIsPressed = false;
+            window.siyuan.shiftIsPressed = false;
+            document.body.classList.remove("body--blur");
+        } else if (cmd === "blur") {
+            document.body.classList.add("body--blur");
+        } else if (cmd === "enter-full-screen") {
+            document.body.classList.add("body--fullscreen");
+            if ("darwin" === window.siyuan.config.system.os) {
+                if (isWindow()) {
+                    setTabPosition();
+                }
+            }
+        } else if (cmd === "leave-full-screen") {
+            document.body.classList.remove("body--fullscreen");
+            if ("darwin" === window.siyuan.config.system.os) {
+                if (isWindow()) {
+                    setTabPosition();
+                }
+            }
+        } else if (cmd === "maximize") {
+            document.body.classList.add("body--maximize");
+        } else if (cmd === "unmaximize") {
+            document.body.classList.remove("body--maximize");
+        }
+    });
+    if (!isWindow()) {
+        on(Constants.SIYUAN_OPEN_URL, (event, url) => {
+            processSYLink(app, url);
+        });
+    }
+    on(Constants.SIYUAN_OPEN_FILE, (event, data) => {
+        if (!data.app) {
+            data.app = app;
+        }
+        openFile(data);
+    });
+    on(Constants.SIYUAN_SAVE_CLOSE, (event, close) => {
+        if (isWindow()) {
+            closeWindow(app);
+        } else {
+            winOnClose(close);
+        }
+    });
+    on(Constants.SIYUAN_SEND_WINDOWS, (e, ipcData: IWebSocketData) => {
+        onWindowsMsg(ipcData, app);
+    });
+    on(Constants.SIYUAN_HOTKEY, (e, data) => {
+        let matchCommand = false;
+        app.plugins.find(item => {
+            item.commands.find(command => {
+                if (command.globalCallback && data.hotkey === command.customHotkey) {
+                    matchCommand = true;
+                    command.globalCallback();
+                    return true;
+                }
+            });
+            if (matchCommand) {
+                return true;
+            }
+        });
+    });
+    /// #endif
 
     if (isWindow()) {
         document.body.insertAdjacentHTML("beforeend", `<div class="toolbar__window">
@@ -297,24 +410,48 @@ ${response.data.replace("%pages", "<span class=totalPages></span>").replace("%pa
             if (pinElement.getAttribute("aria-label") === window.siyuan.languages.pin) {
                 pinElement.querySelector("use").setAttribute("xlink:href", "#iconUnpin");
                 pinElement.setAttribute("aria-label", window.siyuan.languages.unpin);
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, "setAlwaysOnTopTrue");
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, "setAlwaysOnTopTrue");
+                /// #endif
             } else {
                 pinElement.querySelector("use").setAttribute("xlink:href", "#iconPin");
                 pinElement.setAttribute("aria-label", window.siyuan.languages.pin);
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, "setAlwaysOnTopFalse");
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, "setAlwaysOnTopFalse");
+                /// #endif
             }
         });
     }
 
+    /// #if !TAURI
     const isFullScreen = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
         cmd: "isFullScreen",
     });
+    /// #endif
+    /// #if TAURI
+    const isFullScreen = await invokeHandler(Constants.SIYUAN_GET, {
+        cmd: "isFullScreen",
+    });
+    /// #endif
     if (isFullScreen) {
         document.body.classList.add("body--fullscreen");
     }
+    /// #if !TAURI
     const isMaximized = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
         cmd: "isMaximized",
     });
+    /// #endif
+    /// #if TAURI
+    const isMaximized = await invokeHandler(Constants.SIYUAN_GET, {
+        cmd: "isMaximized",
+    });
+    /// #endif
     if (isMaximized) {
         document.body.classList.add("body--maximize");
     }
@@ -352,10 +489,20 @@ ${response.data.replace("%pages", "<span class=totalPages></span>").replace("%pa
         const restoreBtnElement = document.getElementById("restoreWindow");
 
         restoreBtnElement.addEventListener("click", () => {
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, "restore");
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, "restore");
+            /// #endif
         });
         maxBtnElement.addEventListener("click", () => {
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, "maximize");
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, "maximize");
+            /// #endif
         });
 
         const minBtnElement = document.getElementById("minWindow");
@@ -364,7 +511,12 @@ ${response.data.replace("%pages", "<span class=totalPages></span>").replace("%pa
             if (minBtnElement.classList.contains("window-controls__item--disabled")) {
                 return;
             }
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_CMD, "minimize");
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_CMD, "minimize");
+            /// #endif
         });
         closeBtnElement.addEventListener("click", () => {
             if (isWindow()) {

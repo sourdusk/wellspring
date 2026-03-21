@@ -13,7 +13,12 @@ import {fetchPost, fetchSyncPost} from "../util/fetch";
 import {focusBlock, focusByOffset, focusByRange} from "../protyle/util/selection";
 import {onGet} from "../protyle/util/onGet";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {invokeHandler} from "../tauri/bridge";
 /// #endif
 import {pushBack} from "../util/backForward";
 import {Asset} from "../asset";
@@ -201,6 +206,7 @@ export const openFile = async (options: IOpenFileOptions) => {
     }
 
     /// #if !BROWSER
+    /// #if !TAURI
     // https://github.com/siyuan-note/siyuan/issues/7491
     if (!options.position || (options.position === "right" && options.assetPath)) {
         let hasMatch = false;
@@ -211,6 +217,30 @@ export const openFile = async (options: IOpenFileOptions) => {
             }
         });
         hasMatch = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
+            cmd: Constants.SIYUAN_OPEN_FILE,
+            options: JSON.stringify(optionsClone),
+            port: location.port,
+        });
+        if (hasMatch) {
+            if (options.afterOpen) {
+                options.afterOpen();
+            }
+            return;
+        }
+    }
+    /// #endif
+    /// #endif
+    /// #if TAURI
+    // https://github.com/siyuan-note/siyuan/issues/7491
+    if (!options.position || (options.position === "right" && options.assetPath)) {
+        let hasMatch = false;
+        const optionsClone: IObject = {};
+        Object.keys(options).forEach((key: keyof IOpenFileOptions) => {
+            if (key !== "app" && options[key] && typeof options[key] !== "function") {
+                optionsClone[key] = JSON.parse(JSON.stringify(options[key]));
+            }
+        });
+        hasMatch = await invokeHandler(Constants.SIYUAN_GET, {
             cmd: Constants.SIYUAN_OPEN_FILE,
             options: JSON.stringify(optionsClone),
             port: location.port,

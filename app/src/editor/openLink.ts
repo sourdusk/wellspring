@@ -1,6 +1,12 @@
 import {getIdFromSYProtocol, isLocalPath, isSYProtocol, pathPosix} from "../util/pathName";
 /// #if !BROWSER
+/// #if !TAURI
 import {shell, ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
+import {open} from "@tauri-apps/plugin-opener";
 /// #endif
 import {getSearch} from "../util/functions";
 import {Constants} from "../constants";
@@ -79,7 +85,12 @@ export const processSYLink = (app: App, url: string) => {
                     /// #endif
                 });
                 /// #if !BROWSER
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, "show");
+                /// #endif
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, "show");
                 /// #endif
             }
             app.plugins.forEach(plugin => {
@@ -155,11 +166,18 @@ export const openLink = (protyle: IProtyle, aLink: string, event?: MouseEvent, c
             linkAddress = `https://${linkAddress}`;
         }
         /// #if !BROWSER
+        /// #if !TAURI
         shell.openExternal(linkAddress).catch((e) => {
             showMessage(e);
         });
+        /// #endif
         /// #else
         openByMobile(linkAddress);
+        /// #endif
+        /// #if TAURI
+        open(linkAddress).catch((e) => {
+            showMessage(e);
+        });
         /// #endif
     }
     /// #endif

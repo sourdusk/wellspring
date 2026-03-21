@@ -7,7 +7,12 @@ import {focusByRange} from "../protyle/util/selection";
 import {unicode2Emoji} from "../emoji";
 import {Constants} from "../constants";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 /// #if !MOBILE
 /// #endif
@@ -19,7 +24,15 @@ import {hasClosestByClassName} from "../protyle/util/hasClosest";
 
 export const useShell = (cmd: "showItemInFolder" | "openPath", filePath: string) => {
     /// #if !BROWSER
+    /// #if !TAURI
     ipcRenderer.send(Constants.SIYUAN_CMD, {
+        cmd,
+        filePath: filePath
+    });
+    /// #endif
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_CMD, {
         cmd,
         filePath: filePath
     });

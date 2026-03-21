@@ -48,7 +48,12 @@ import {
 import {transaction, updateTransaction} from "./transaction";
 import {hideElements} from "../ui/hideElements";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../../tauri/bridge";
 /// #endif
 import {getEnableHTML, removeEmbed} from "./removeEmbed";
 import {keydown} from "./keydown";
@@ -2482,7 +2487,12 @@ export class WYSIWYG {
             }
             if (event.inputType === "historyUndo") {
                 /// #if !BROWSER
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_CMD, "redo");
+                /// #endif
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_CMD, "redo");
                 /// #endif
                 window.siyuan.menus.menu.remove();
                 return;

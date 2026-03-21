@@ -1,9 +1,14 @@
 import {fetchPost} from "../util/fetch";
 /// #if !BROWSER
 import {afterExport} from "../protyle/export/util";
+/// #if !TAURI
 import {ipcRenderer} from "electron";
 import * as path from "path";
+/// #endif
 import {exportLayout} from "../layout/util";
+/// #endif
+/// #if TAURI
+import {invokeHandler} from "../tauri/bridge";
 /// #endif
 import {isBrowser} from "../util/functions";
 import {showMessage} from "../dialog/message";
@@ -299,6 +304,7 @@ export const exportConfig = {
                 openByMobile(response.data.zip);
             });
             /// #else
+            /// #if !TAURI
             const result = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
                 cmd: "showOpenDialog",
                 title: window.siyuan.languages.export + " " + "Data",
@@ -314,6 +320,23 @@ export const exportConfig = {
                 afterExport(path.join(result.filePaths[0], response.data.name), msgId);
             });
             /// #endif
+            /// #if TAURI
+            const result = await invokeHandler(Constants.SIYUAN_GET, {
+                cmd: "showOpenDialog",
+                title: window.siyuan.languages.export + " " + "Data",
+                properties: ["createDirectory", "openDirectory"],
+            });
+            if (result.canceled || result.filePaths.length === 0) {
+                return;
+            }
+            const msgId = showMessage(window.siyuan.languages.exporting, -1);
+            fetchPost("/api/export/exportDataInFolder", {
+                folder: result.filePaths[0],
+            }, response => {
+                afterExport(result.filePaths[0] + "/" + response.data.name, msgId);
+            });
+            /// #endif
+            /// #endif
         });
         exportConfig.element.querySelector("#exportConf").addEventListener("click", async () => {
             fetchPost("/api/system/exportConf", {}, response => {
@@ -328,11 +351,20 @@ export const exportConfig = {
         });
         const pandocBinElement = exportConfig.element.querySelector("#pandocBin") as HTMLInputElement;
         pandocBinElement.addEventListener("click", async () => {
+            /// #if !TAURI
             const localPath = await ipcRenderer.invoke(Constants.SIYUAN_GET, {
                 cmd: "showOpenDialog",
                 defaultPath: window.siyuan.config.system.homeDir,
                 properties: ["openFile", "showHiddenFiles"],
             });
+            /// #endif
+            /// #if TAURI
+            const localPath = await invokeHandler(Constants.SIYUAN_GET, {
+                cmd: "showOpenDialog",
+                defaultPath: window.siyuan.config.system.homeDir,
+                properties: ["openFile", "showHiddenFiles"],
+            });
+            /// #endif
             if (localPath.filePaths.length === 0) {
                 pandocBinElement.value = window.siyuan.config.export.pandocBin;
                 return;

@@ -36,7 +36,12 @@ import {processIOSPurchaseResponse} from "./util/iOSPurchase";
 /// #if BROWSER
 import {setLocalShorthandCount} from "./util/noRelyPCFunction";
 /// #else
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "./tauri/bridge";
 /// #endif
 import {getDockByType} from "./layout/tabUtil";
 import {Tag} from "./layout/dock/Tag";
@@ -258,5 +263,10 @@ window.showKeyboardToolbar = () => {
 };
 window.processIOSPurchaseResponse = processIOSPurchaseResponse;
 /// #else
+/// #if !TAURI
 ipcRenderer.send(Constants.SIYUAN_READY_TO_SHOW);
+/// #endif
+/// #if TAURI
+send(Constants.SIYUAN_READY_TO_SHOW);
+/// #endif
 /// #endif

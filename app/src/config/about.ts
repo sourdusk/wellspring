@@ -1,6 +1,12 @@
 import {Constants} from "../constants";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer, shell} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send, invokeHandler} from "../tauri/bridge";
+import {open} from "@tauri-apps/plugin-opener";
 /// #endif
 import {isBrowser} from "../util/functions";
 import {fetchPost} from "../util/fetch";
@@ -342,13 +348,22 @@ ${checkUpdateHTML}
             item.addEventListener("click", () => {
                 const url = item.getAttribute("data-url");
                 /// #if !BROWSER
+                /// #if !TAURI
                 if (url.startsWith("http")) {
                     shell.openExternal(url);
                 } else {
                     useShell("openPath", url);
                 }
+                /// #endif
                 /// #else
                 window.open(url);
+                /// #endif
+                /// #if TAURI
+                if (url.startsWith("http")) {
+                    open(url);
+                } else {
+                    useShell("openPath", url);
+                }
                 /// #endif
             });
         });
@@ -517,10 +532,18 @@ ${checkUpdateHTML}
             const autoLaunchMode = parseInt(autoLaunchElement.value);
             fetchPost("/api/system/setAutoLaunch", {autoLaunch: autoLaunchMode}, () => {
                 window.siyuan.config.system.autoLaunch2 = autoLaunchMode;
+                /// #if !TAURI
                 ipcRenderer.send(Constants.SIYUAN_AUTO_LAUNCH, {
                     openAtLogin: 0 !== autoLaunchMode,
                     openAsHidden: 2 === autoLaunchMode
                 });
+                /// #endif
+                /// #if TAURI
+                send(Constants.SIYUAN_AUTO_LAUNCH, {
+                    openAtLogin: 0 !== autoLaunchMode,
+                    openAsHidden: 2 === autoLaunchMode
+                });
+                /// #endif
             });
         });
         /// #endif
@@ -533,7 +556,22 @@ ${checkUpdateHTML}
                 window.siyuan.config.system.networkProxy.host = host;
                 window.siyuan.config.system.networkProxy.port = port;
                 /// #if !BROWSER
+                /// #if !TAURI
                 ipcRenderer.invoke(Constants.SIYUAN_GET, {
+                    cmd: "setProxy",
+                    proxyURL: `${window.siyuan.config.system.networkProxy.scheme}://${window.siyuan.config.system.networkProxy.host}:${window.siyuan.config.system.networkProxy.port}`,
+                }).then(() => {
+                    exportLayout({
+                        errorExit: false,
+                        cb() {
+                            window.location.reload();
+                        },
+                    });
+                });
+                /// #endif
+                /// #endif
+                /// #if TAURI
+                invokeHandler(Constants.SIYUAN_GET, {
                     cmd: "setProxy",
                     proxyURL: `${window.siyuan.config.system.networkProxy.scheme}://${window.siyuan.config.system.networkProxy.host}:${window.siyuan.config.system.networkProxy.port}`,
                 }).then(() => {

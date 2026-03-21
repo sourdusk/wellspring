@@ -12,7 +12,9 @@ import {openLink} from "../../../editor/openLink";
 import {dragUpload, editAssetItem} from "./asset";
 import {previewImages} from "../../preview/image";
 /// #if !BROWSER
+/// #if !TAURI
 import {webUtils} from "electron";
+/// #endif
 /// #endif
 import {isBrowser} from "../../../util/functions";
 import {Constants} from "../../../constants";
@@ -274,6 +276,7 @@ class="fn__flex-1 fn__flex${["url", "text", "number", "email", "phone", "block"]
                 } else if (!window.siyuan.dragElement && event.dataTransfer.types[0] === "Files") {
                     const cellElement = element.querySelector(".custom-attr__avvalue--active") as HTMLElement;
                     if (cellElement) {
+                        /// #if !TAURI
                         if (event.dataTransfer.types[0] === "Files" && !isBrowser()) {
                             const files: ILocalFiles[] = [];
                             for (let i = 0; i < event.dataTransfer.files.length; i++) {
@@ -284,6 +287,7 @@ class="fn__flex-1 fn__flex${["url", "text", "number", "email", "phone", "block"]
                             }
                             dragUpload(files, protyle, cellElement);
                         }
+                        /// #endif
                     }
                 }
                 if (window.siyuan.dragElement) {

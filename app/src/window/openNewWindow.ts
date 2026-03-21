@@ -1,6 +1,11 @@
 import {layoutToJSON} from "../layout/util";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../tauri/bridge";
 /// #endif
 import {Constants} from "../constants";
 import {Tab} from "../layout/Tab";
@@ -22,7 +27,18 @@ export const openNewWindow = (tab: Tab, options: windowOptions = {}) => {
     const json = {};
     layoutToJSON(tab, json);
     /// #if !BROWSER
+    /// #if !TAURI
     ipcRenderer.send(Constants.SIYUAN_OPEN_WINDOW, {
+        position: options.position,
+        width: options.width,
+        height: options.height,
+        // 需要 encode， 否则 https://github.com/siyuan-note/siyuan/issues/9343
+        url: `${window.location.protocol}//${window.location.host}/stage/build/app/window.html?v=${Constants.SIYUAN_VERSION}&json=${encodeURIComponent(JSON.stringify([json]))}`
+    });
+    /// #endif
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_OPEN_WINDOW, {
         position: options.position,
         width: options.width,
         height: options.height,
@@ -63,7 +79,17 @@ export const openNewWindowById = async (id: string | string[], options: windowOp
         });
     }
     /// #if !BROWSER
+    /// #if !TAURI
     ipcRenderer.send(Constants.SIYUAN_OPEN_WINDOW, {
+        position: options.position,
+        width: options.width,
+        height: options.height,
+        url: `${window.location.protocol}//${window.location.host}/stage/build/app/window.html?v=${Constants.SIYUAN_VERSION}&json=${encodeURIComponent(JSON.stringify(json))}`
+    });
+    /// #endif
+    /// #endif
+    /// #if TAURI
+    send(Constants.SIYUAN_OPEN_WINDOW, {
         position: options.position,
         width: options.width,
         height: options.height,
@@ -97,12 +123,22 @@ export const openAssetNewWindow = (assetPath: string, options: windowOptions = {
                 instance: "Asset",
             }
         }];
+        /// #if !TAURI
         ipcRenderer.send(Constants.SIYUAN_OPEN_WINDOW, {
             position: options.position,
             width: options.width,
             height: options.height,
             url: `${window.location.protocol}//${window.location.host}/stage/build/app/window.html?v=${Constants.SIYUAN_VERSION}&json=${encodeURIComponent(JSON.stringify(json))}`
         });
+        /// #endif
+        /// #if TAURI
+        send(Constants.SIYUAN_OPEN_WINDOW, {
+            position: options.position,
+            width: options.width,
+            height: options.height,
+            url: `${window.location.protocol}//${window.location.host}/stage/build/app/window.html?v=${Constants.SIYUAN_VERSION}&json=${encodeURIComponent(JSON.stringify(json))}`
+        });
+        /// #endif
     }
     /// #endif
 };

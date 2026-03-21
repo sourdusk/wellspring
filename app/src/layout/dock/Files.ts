@@ -29,7 +29,12 @@ import {isTouchDevice} from "../../util/functions";
 import {App} from "../../index";
 import {refreshFileTree} from "../../dialog/processSystem";
 /// #if !BROWSER
+/// #if !TAURI
 import {ipcRenderer} from "electron";
+/// #endif
+/// #endif
+/// #if TAURI
+import {send} from "../../tauri/bridge";
 /// #endif
 import {hideTooltip, showTooltip} from "../../dialog/tooltip";
 import {selectOpenTab} from "./util";
@@ -504,7 +509,12 @@ export class Files extends Model {
             });
             window.siyuan.dragElement = undefined;
             /// #if !BROWSER
+            /// #if !TAURI
             ipcRenderer.send(Constants.SIYUAN_SEND_WINDOWS, {cmd: "resetTabsStyle", data: "rmDragStyle"});
+            /// #endif
+            /// #if TAURI
+            send(Constants.SIYUAN_SEND_WINDOWS, {cmd: "resetTabsStyle", data: "rmDragStyle"});
+            /// #endif
             /// #else
             document.querySelectorAll(".layout-tab-bars--drag").forEach(item => {
                 item.classList.remove("layout-tab-bars--drag");

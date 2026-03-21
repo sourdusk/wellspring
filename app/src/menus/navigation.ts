@@ -1,7 +1,12 @@
 import {copySubMenu, exportMd, movePathToMenu, openFileAttr, renameMenu,} from "./commonMenuItem";
 /// #if !BROWSER
+/// #if !TAURI
 import {FileFilter, ipcRenderer} from "electron";
+/// #endif
 import * as path from "path";
+/// #endif
+/// #if TAURI
+import {invokeHandler} from "../tauri/bridge";
 /// #endif
 import {MenuItem} from "./Menu";
 import {getDisplayName, getNotebookName, getTopPaths, pathPosix, useShell} from "../util/pathName";
@@ -737,6 +742,7 @@ export const genImportMenu = (notebookId: string, pathString: string) => {
             icon: isDoc ? "iconMarkdown" : "iconFolder",
             label,
             click: async () => {
+                /// #if !TAURI
                 let filters: FileFilter[] = [];
                 if (isDoc) {
                     filters = [{name: "Markdown", extensions: ["md", "markdown"]}];
@@ -747,6 +753,15 @@ export const genImportMenu = (notebookId: string, pathString: string) => {
                     filters,
                     properties: [isDoc ? "openFile" : "openDirectory"],
                 });
+                /// #endif
+                /// #if TAURI
+                const localPath = await invokeHandler(Constants.SIYUAN_GET, {
+                    cmd: "showOpenDialog",
+                    defaultPath: window.siyuan.config.system.homeDir,
+                    filters: isDoc ? [{name: "Markdown", extensions: ["md", "markdown"]}] : [],
+                    properties: [isDoc ? "openFile" : "openDirectory"],
+                });
+                /// #endif
                 if (localPath.filePaths.length === 0) {
                     return;
                 }
