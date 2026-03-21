@@ -199,7 +199,7 @@ require (
 	modernc.org/fileutil v1.4.0 // indirect
 )
 
-replace github.com/mattn/go-sqlite3 => github.com/88250/go-sqlite3 v1.14.13-0.20231214121541-e7f54c482950
+replace github.com/mattn/go-sqlite3 => ./go-sqlite3-local
 
 replace github.com/pdfcpu/pdfcpu => github.com/88250/pdfcpu v0.3.14-0.20250424122812-f10e8d9d8d46
 
