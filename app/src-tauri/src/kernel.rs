@@ -24,9 +24,18 @@ pub fn find_available_port() -> u16 {
 }
 
 pub fn spawn_kernel(app: &AppHandle, port: u16, workspace_dir: &str, lang: &str) -> Result<CommandChild, String> {
+    // In dev mode, resources are in the app/ directory (parent of src-tauri/)
+    // In production, they're in the resource_dir() provided by Tauri
+    let wd = if cfg!(dev) {
+        let manifest_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+        manifest_dir.parent().unwrap().to_string_lossy().to_string()
+    } else {
+        app.path().resource_dir().unwrap().to_string_lossy().to_string()
+    };
+
     let args = vec![
         "--port".to_string(), port.to_string(),
-        "--wd".to_string(), app.path().resource_dir().unwrap().to_string_lossy().to_string(),
+        "--wd".to_string(), wd,
         "--workspace".to_string(), workspace_dir.to_string(),
         "--lang".to_string(), lang.to_string(),
     ];
