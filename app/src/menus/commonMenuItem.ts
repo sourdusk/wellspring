@@ -4,7 +4,7 @@ import {shell} from "electron";
 /// #endif
 /// #endif
 /// #if TAURI
-import {open} from "@tauri-apps/plugin-opener";
+import {openUrl} from "@tauri-apps/plugin-opener";
 /// #endif
 import {confirmDialog} from "../dialog/confirmDialog";
 import {getSearch, isMobile, isValidCustomAttrName} from "../util/functions";
@@ -945,7 +945,7 @@ export const openMenu = (app: App, src: string, onlyMenu: boolean, showAccelerat
                 });
                 /// #endif
                 /// #if TAURI
-                open(src).catch((e) => {
+                openUrl(src).catch((e) => {
                     showMessage(e);
                 });
                 /// #endif

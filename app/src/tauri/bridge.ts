@@ -6,9 +6,9 @@ import {getCurrentWindow} from "@tauri-apps/api/window";
 export function send(channel: string, data?: any): void {
     switch (channel) {
         case "siyuan-cmd": {
-            const cmd = data?.cmd;
+            const cmd = typeof data === "string" ? data : data?.cmd;
             if (cmd) {
-                invoke(`cmd_${toSnakeCase(cmd)}`, {data}).catch(console.error);
+                invoke(`cmd_${toSnakeCase(cmd)}`, {data: typeof data === "string" ? {} : data}).catch(console.error);
             }
             break;
         }

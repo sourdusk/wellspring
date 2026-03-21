@@ -12,7 +12,7 @@ import {shell} from "electron";
 /// #endif
 /// #endif
 /// #if TAURI
-import {open} from "@tauri-apps/plugin-opener";
+import {openUrl} from "@tauri-apps/plugin-opener";
 /// #endif
 /// #if !MOBILE
 import {openAsset, openBy} from "../../editor/util";
@@ -117,7 +117,7 @@ export class Preview {
                         /// #endif
                         /// #endif
                         /// #if TAURI
-                        open(linkAddress).catch((e) => {
+                        openUrl(linkAddress).catch((e) => {
                             showMessage(e);
                         });
                         /// #endif

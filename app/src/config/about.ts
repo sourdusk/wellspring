@@ -6,7 +6,7 @@ import {ipcRenderer, shell} from "electron";
 /// #endif
 /// #if TAURI
 import {send, invokeHandler} from "../tauri/bridge";
-import {open} from "@tauri-apps/plugin-opener";
+import {openUrl} from "@tauri-apps/plugin-opener";
 /// #endif
 import {isBrowser} from "../util/functions";
 import {fetchPost} from "../util/fetch";
@@ -360,7 +360,7 @@ ${checkUpdateHTML}
                 /// #endif
                 /// #if TAURI
                 if (url.startsWith("http")) {
-                    open(url);
+                    openUrl(url);
                 } else {
                     useShell("openPath", url);
                 }

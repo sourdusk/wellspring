@@ -22,7 +22,9 @@ import {Tab} from "../layout/Tab";
 import {initWindowEvent} from "../boot/globalEvent/event";
 import {getAllEditor} from "../layout/getAll";
 /// #if !BROWSER
+/// #if !TAURI
 import {initNativeDialogOverride} from "../protyle/util/compatibility";
+/// #endif
 /// #endif
 
 export const init = (app: App) => {
@@ -73,7 +75,9 @@ export const init = (app: App) => {
     initStatus(true);
     initWindow(app);
     /// #if !BROWSER
+    /// #if !TAURI
     initNativeDialogOverride();
+    /// #endif
     /// #endif
     appearance.onSetAppearance(window.siyuan.config.appearance);
     initAssets();

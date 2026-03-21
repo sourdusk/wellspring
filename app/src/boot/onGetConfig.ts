@@ -6,10 +6,10 @@ import {setStorageVal} from "../protyle/util/compatibility";
 import {ipcRenderer, webFrame} from "electron";
 import * as fs from "fs";
 import * as path from "path";
+import {initNativeDialogOverride} from "../protyle/util/compatibility";
 /// #endif
 import {afterExport} from "../protyle/export/util";
 import {onWindowsMsg} from "../window/onWindowsMsg";
-import {initNativeDialogOverride} from "../protyle/util/compatibility";
 /// #endif
 /// #if TAURI
 import {send, invokeHandler, on} from "../tauri/bridge";
@@ -90,7 +90,9 @@ export const onGetConfig = (isStart: boolean, app: App) => {
     initStatus();
     initWindow(app);
     /// #if !BROWSER
+    /// #if !TAURI
     initNativeDialogOverride();
+    /// #endif
     /// #endif
     appearance.onSetAppearance(window.siyuan.config.appearance);
     initAssets();

@@ -4,7 +4,6 @@
   "version": "3.6.1",
   "build": {
     "frontendDist": "../stage/build/tauri",
-    "devUrl": "http://localhost:6806/stage/build/tauri/",
     "beforeBuildCommand": "pnpm run build:tauri",
     "beforeDevCommand": "pnpm run dev:tauri"
   },

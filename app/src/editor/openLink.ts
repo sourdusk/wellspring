@@ -6,7 +6,7 @@ import {shell, ipcRenderer} from "electron";
 /// #endif
 /// #if TAURI
 import {send} from "../tauri/bridge";
-import {open} from "@tauri-apps/plugin-opener";
+import {openUrl} from "@tauri-apps/plugin-opener";
 /// #endif
 import {getSearch} from "../util/functions";
 import {Constants} from "../constants";
@@ -175,7 +175,7 @@ export const openLink = (protyle: IProtyle, aLink: string, event?: MouseEvent, c
         openByMobile(linkAddress);
         /// #endif
         /// #if TAURI
-        open(linkAddress).catch((e) => {
+        openUrl(linkAddress).catch((e) => {
             showMessage(e);
         });
         /// #endif
