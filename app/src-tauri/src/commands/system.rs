@@ -20,13 +20,13 @@ pub async fn cmd_notification(
 
 #[tauri::command]
 pub async fn cmd_open_path(app: AppHandle, data: serde_json::Value) -> Result<(), String> {
-    let path = data.get("path").and_then(|v| v.as_str()).unwrap_or("");
+    let path = data.get("filePath").and_then(|v| v.as_str()).unwrap_or("");
     app.opener().open_path(path, None::<&str>).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
 pub async fn cmd_show_item_in_folder(app: AppHandle, data: serde_json::Value) -> Result<(), String> {
-    let path = data.get("path").and_then(|v| v.as_str()).unwrap_or("");
+    let path = data.get("filePath").and_then(|v| v.as_str()).unwrap_or("");
     app.opener().reveal_item_in_dir(path).map_err(|e| e.to_string())
 }
 

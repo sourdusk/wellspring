@@ -290,7 +290,7 @@ fn main() {
                 }
                 tauri::WindowEvent::Focused(focused) => {
                     let event_type = if *focused { "focus" } else { "blur" };
-                    let _ = window.emit("siyuan-event", serde_json::json!({"type": event_type}));
+                    let _ = window.emit("siyuan-event", event_type);
                 }
                 tauri::WindowEvent::Resized(size) => {
                     if window.label() == "main" {

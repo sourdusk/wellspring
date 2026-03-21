@@ -240,11 +240,16 @@ export const openFile = async (options: IOpenFileOptions) => {
                 optionsClone[key] = JSON.parse(JSON.stringify(options[key]));
             }
         });
-        hasMatch = await invokeHandler(Constants.SIYUAN_GET, {
-            cmd: Constants.SIYUAN_OPEN_FILE,
-            options: JSON.stringify(optionsClone),
-            port: location.port,
-        });
+        try {
+            hasMatch = await invokeHandler(Constants.SIYUAN_GET, {
+                cmd: Constants.SIYUAN_OPEN_FILE,
+                options: JSON.stringify(optionsClone),
+                port: location.port,
+            });
+        } catch (e) {
+            // Multi-window file deduplication not yet fully implemented in Tauri
+            hasMatch = false;
+        }
         if (hasMatch) {
             if (options.afterOpen) {
                 options.afterOpen();

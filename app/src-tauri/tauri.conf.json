@@ -4,8 +4,7 @@
   "version": "3.6.1",
   "build": {
     "frontendDist": "../stage/build/tauri",
-    "beforeBuildCommand": "pnpm run build:tauri",
-    "beforeDevCommand": "pnpm run dev:tauri"
+    "beforeBuildCommand": "pnpm run build:tauri"
   },
   "app": {
     "windows": [
@@ -18,6 +17,7 @@
         "minHeight": 376,
         "decorations": false,
         "visible": false,
+        "dragDropEnabled": false,
         "url": "index.html"
       }
     ],
