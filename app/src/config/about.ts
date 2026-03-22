@@ -280,15 +280,13 @@ ${checkUpdateHTML}
 </div>
 <div class="b3-label">
     <div class="config-about__logo">
-        <img src="/stage/icon.png">
-        <span>${window.siyuan.languages.siyuanNote}</span>
+        <img src="/stage/wellspring-logo.svg" style="height: 48px; width: 48px;">
+        <span>Wellspring</span>
         <span class="fn__space"></span>
-        <span class="ft__on-surface">${window.siyuan.languages.slogan}</span>
-        <span class="fn__space"></span>
-        <span style="color:var(--b3-theme-background);font-family: cursive;">会泽百家&nbsp;至公天下</span>
+        <span class="ft__on-surface">v${Constants.SIYUAN_VERSION}</span>
     </div>
     <div class='fn__hr'></div>
-    ${window.siyuan.languages.about1} ${"harmony" === window.siyuan.config.system.container ? " • " + window.siyuan.languages.feedback + " 845765@qq.com" : ""} 
+    Copyright &copy; 2024-${new Date().getFullYear()} Wellspring Contributors. All rights reserved.
 </div>`;
     },
     bindEvent: () => {

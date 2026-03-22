@@ -712,7 +712,7 @@ const getExportPath = (option: IExportOptions, removeAssets?: boolean, mergeSubd
             showMessage(response.msg);
             return;
         }
-        let exportType = "HTML (SiYuan)";
+        let exportType = "HTML (Wellspring)";
         switch (option.type) {
             case "htmlmd":
                 exportType = "HTML (Markdown)";
@@ -808,7 +808,7 @@ export const onExport = async (data: IWebSocketData, filePath: string, servePath
     <script src="${servePath}stage/protyle/js/protyle-html.js?v=${Constants.SIYUAN_VERSION}"></script>
     ${themeStyle}
     <title>${data.data.name}</title>
-    <!-- Exported by SiYuan v${Constants.SIYUAN_VERSION} -->
+    <!-- Exported by Wellspring v${Constants.SIYUAN_VERSION} -->
     <style>
         body {font-family: var(--b3-font-family);background-color: var(--b3-theme-background);color: var(--b3-theme-on-background)}
         ${await setInlineStyle(false, servePath)}

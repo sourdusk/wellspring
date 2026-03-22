@@ -1,6 +1,6 @@
 {
   "identifier": "default",
-  "description": "Default capabilities for SiYuan",
+  "description": "Default capabilities for Wellspring",
   "windows": ["main", "window-*"],
   "remote": {
     "urls": ["http://127.0.0.1:*/*"]

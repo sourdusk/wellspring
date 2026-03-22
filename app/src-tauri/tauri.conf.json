@@ -1,7 +1,7 @@
 {
   "productName": "Wellspring",
   "identifier": "org.b3log.wellspring",
-  "version": "3.6.1",
+  "version": "4.0.0",
   "build": {
     "frontendDist": "../stage/build/tauri",
     "beforeBuildCommand": "pnpm run build:tauri"

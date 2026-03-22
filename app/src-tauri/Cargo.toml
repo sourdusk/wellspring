@@ -1,6 +1,6 @@
 [package]
 name = "wellspring"
-version = "3.6.1"
+version = "4.0.0"
 edition = "2021"
 
 [build-dependencies]
