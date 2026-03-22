@@ -192,7 +192,7 @@
     <div class="ft__on-surface">
         {{.l2}}
     </div>
-    <button class="b3-button b3-button--white" onclick="exitSiYuan()">{{.l5}}</button>
+    <button class="b3-button b3-button--white" onclick="exitWellspring()">{{.l5}}</button>
     <div class="ft__on-surface">
         {{.l7}}
     </div>
@@ -445,10 +445,10 @@
     const url = new URL(window.location)
     toPath = url.searchParams.get("to") || "/"
 
-    const exitSiYuan = () => {
+    const exitWellspring = () => {
         if (toPath.indexOf("/stage/build/app/window.html") > -1) {
             const {ipcRenderer} = require('electron');
-            ipcRenderer.send("siyuan-cmd", "destroy");
+            ipcRenderer.send("wellspring-cmd", "destroy");
             return;
         }
 
@@ -551,16 +551,16 @@
 
         try {
             const {ipcRenderer} = require('electron')
-            ipcRenderer.send("siyuan-ready-to-show");
+            ipcRenderer.send("wellspring-ready-to-show");
             ipcRenderer.on('siyuan-save-close', (event, close) => {
-                exitSiYuan()
+                exitWellspring()
             })
-            await ipcRenderer.invoke("siyuan-init", {
+            await ipcRenderer.invoke("wellspring-init", {
                 languages: {{.trayMenuLangs}},
                 workspaceDir: '{{.workspaceDir}}',
                 port: location.port
             });
-            ipcRenderer.send("siyuan-hotkey", {
+            ipcRenderer.send("wellspring-hotkey", {
                 languages: {{.trayMenuLangs}},
                 hotkeys: ['{{.keymapGeneralToggleWin}}']
             });

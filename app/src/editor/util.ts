@@ -515,7 +515,7 @@ const newTab = (options: IOpenFileOptions) => {
             title: options.custom.title,
             callback(tab) {
                 if (options.custom.id) {
-                    if (options.custom.id === "siyuan-card") {
+                    if (options.custom.id === "wellspring-card") {
                         tab.addModel(newCardModel({
                             app: options.app,
                             tab,

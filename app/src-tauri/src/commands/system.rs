@@ -7,7 +7,7 @@ pub async fn cmd_notification(
     app: AppHandle,
     data: serde_json::Value,
 ) -> Result<(), String> {
-    let title = data.get("title").and_then(|v| v.as_str()).unwrap_or("SiYuan");
+    let title = data.get("title").and_then(|v| v.as_str()).unwrap_or("Wellspring");
     let body = data.get("body").and_then(|v| v.as_str()).unwrap_or("");
 
     app.notification()

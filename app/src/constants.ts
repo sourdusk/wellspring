@@ -28,38 +28,38 @@ export abstract class Constants {
     public static readonly SERVICE_WORKER_PATH: string = "/service-worker.js";
 
     // drop 事件
-    public static readonly SIYUAN_DROP_FILE: string = "application/siyuan-file";
-    public static readonly SIYUAN_DROP_GUTTER: string = "application/siyuan-gutter";
-    public static readonly SIYUAN_DROP_TAB: string = "application/siyuan-tab";
-    public static readonly SIYUAN_DROP_EDITOR: string = "application/siyuan-editor";
+    public static readonly SIYUAN_DROP_FILE: string = "application/wellspring-file";
+    public static readonly SIYUAN_DROP_GUTTER: string = "application/wellspring-gutter";
+    public static readonly SIYUAN_DROP_TAB: string = "application/wellspring-tab";
+    public static readonly SIYUAN_DROP_EDITOR: string = "application/wellspring-editor";
 
     // 渲染进程调主进程
-    public static readonly SIYUAN_CMD: string = "siyuan-cmd";
-    public static readonly SIYUAN_GET: string = "siyuan-get";
-    public static readonly SIYUAN_EVENT: string = "siyuan-event";
+    public static readonly SIYUAN_CMD: string = "wellspring-cmd";
+    public static readonly SIYUAN_GET: string = "wellspring-get";
+    public static readonly SIYUAN_EVENT: string = "wellspring-event";
 
-    public static readonly SIYUAN_CONFIG_TRAY: string = "siyuan-config-tray";
-    public static readonly SIYUAN_QUIT: string = "siyuan-quit";
-    public static readonly SIYUAN_HOTKEY: string = "siyuan-hotkey";
-    public static readonly SIYUAN_INIT: string = "siyuan-init";
-    public static readonly SIYUAN_READY_TO_SHOW: string = "siyuan-ready-to-show";
-    public static readonly SIYUAN_SEND_WINDOWS: string = "siyuan-send-windows"; // 主窗口和各新窗口之间的通信，{cmd: "closetab"|"lockscreen"|"lockscreenByMode", data: {}})
-    public static readonly SIYUAN_SAVE_CLOSE: string = "siyuan-save-close";
-    public static readonly SIYUAN_AUTO_LAUNCH: string = "siyuan-auto-launch";
+    public static readonly SIYUAN_CONFIG_TRAY: string = "wellspring-config-tray";
+    public static readonly SIYUAN_QUIT: string = "wellspring-quit";
+    public static readonly SIYUAN_HOTKEY: string = "wellspring-hotkey";
+    public static readonly SIYUAN_INIT: string = "wellspring-init";
+    public static readonly SIYUAN_READY_TO_SHOW: string = "wellspring-ready-to-show";
+    public static readonly SIYUAN_SEND_WINDOWS: string = "wellspring-send-windows"; // 主窗口和各新窗口之间的通信，{cmd: "closetab"|"lockscreen"|"lockscreenByMode", data: {}})
+    public static readonly SIYUAN_SAVE_CLOSE: string = "wellspring-save-close";
+    public static readonly SIYUAN_AUTO_LAUNCH: string = "wellspring-auto-launch";
 
-    public static readonly SIYUAN_OPEN_WORKSPACE: string = "siyuan-open-workspace";
-    public static readonly SIYUAN_OPEN_URL: string = "siyuan-open-url";
-    public static readonly SIYUAN_OPEN_WINDOW: string = "siyuan-open-window";
-    public static readonly SIYUAN_OPEN_FILE: string = "siyuan-open-file";
+    public static readonly SIYUAN_OPEN_WORKSPACE: string = "wellspring-open-workspace";
+    public static readonly SIYUAN_OPEN_URL: string = "wellspring-open-url";
+    public static readonly SIYUAN_OPEN_WINDOW: string = "wellspring-open-window";
+    public static readonly SIYUAN_OPEN_FILE: string = "wellspring-open-file";
 
-    public static readonly SIYUAN_EXPORT_PDF: string = "siyuan-export-pdf";
-    public static readonly SIYUAN_EXPORT_NEWWINDOW: string = "siyuan-export-newwindow";
+    public static readonly SIYUAN_EXPORT_PDF: string = "wellspring-export-pdf";
+    public static readonly SIYUAN_EXPORT_NEWWINDOW: string = "wellspring-export-newwindow";
 
-    public static readonly SIYUAN_CONTEXT_MENU: string = "siyuan-context-menu";
-    public static readonly SIYUAN_CONFIRM_DIALOG: string = "siyuan-confirm-dialog";
-    public static readonly SIYUAN_ALERT_DIALOG: string = "siyuan-alert-dialog";
+    public static readonly SIYUAN_CONTEXT_MENU: string = "wellspring-context-menu";
+    public static readonly SIYUAN_CONFIRM_DIALOG: string = "wellspring-confirm-dialog";
+    public static readonly SIYUAN_ALERT_DIALOG: string = "wellspring-alert-dialog";
 
-    public static readonly SIYUAN_SHOW_WINDOW: string = "siyuan-show-window";
+    public static readonly SIYUAN_SHOW_WINDOW: string = "wellspring-show-window";
 
     // custom
     public static readonly CUSTOM_REMINDER_WECHAT: string = "custom-reminder-wechat";

@@ -156,7 +156,7 @@ const initMultiMenu = (selectItemElements: NodeListOf<Element>, app: App) => {
         icon: "iconUpload",
         submenu: [{
             id: "exportSiYuanZip",
-            label: "SiYuan .sy.zip",
+            label: "Wellspring .sy.zip",
             icon: "iconSiYuan",
             click: () => {
                 const msgId = showMessage(window.siyuan.languages.exporting, -1);
@@ -390,7 +390,7 @@ export const initNavigationMenu = (app: App, liElement: HTMLElement) => {
         icon: "iconUpload",
         submenu: [{
             id: "exportSiYuanZip",
-            label: "SiYuan .sy.zip",
+            label: "Wellspring .sy.zip",
             icon: "iconSiYuan",
             click: () => {
                 const msgId = showMessage(window.siyuan.languages.exporting, -1);

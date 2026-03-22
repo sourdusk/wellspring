@@ -1,4 +1,4 @@
-// SiYuan - Refactor your thinking
+// Wellspring - Refactor your thinking
 // Copyright (c) 2020-present, b3log.org
 //
 // This program is free software: you can redistribute it and/or modify
@@ -55,7 +55,7 @@ const isOpenAsHidden = function () {
 
 remote.initialize();
 
-app.setPath("userData", app.getPath("userData") + "-Electron"); // `~/.config` 下 Electron 相关文件夹名称改为 `SiYuan-Electron` https://github.com/siyuan-note/siyuan/issues/3349
+app.setPath("userData", app.getPath("userData") + "-Electron"); // `~/.config` 下 Electron 相关文件夹名称改为 `Wellspring-Electron` https://github.com/siyuan-note/siyuan/issues/3349
 fs.rmSync(app.getPath("appData") + "/" + app.name, {recursive: true}); // 删除自动创建的应用目录 https://github.com/siyuan-note/siyuan/issues/13150
 
 if (process.platform === "win32") {
@@ -110,7 +110,7 @@ try {
     }
 } catch (e) {
     console.error(e);
-    require("electron").dialog.showErrorBox("创建配置目录失败 Failed to create config directory", "思源需要在用户家目录下创建配置文件夹（~/.config/siyuan），请确保该路径具有写入权限。\n\nSiYuan needs to create a configuration folder (~/.config/siyuan) in the user's home directory. Please make sure that the path has write permissions.");
+    require("electron").dialog.showErrorBox("创建配置目录失败 Failed to create config directory", "思源需要在用户家目录下创建配置文件夹（~/.config/wellspring），请确保该路径具有写入权限。\n\nWellspring needs to create a configuration folder (~/.config/wellspring) in the user's home directory. Please make sure that the path has write permissions.");
     app.exit();
 }
 
@@ -435,7 +435,7 @@ const initMainWindow = () => {
         writeLog("window position [x=" + x + ", y=" + y + "]");
         currentWindow.setPosition(x, y);
     }
-    currentWindow.webContents.userAgent = "SiYuan/" + appVer + " https://b3log.org/siyuan Electron " + currentWindow.webContents.userAgent;
+    currentWindow.webContents.userAgent = "Wellspring/" + appVer + " https://b3log.org/siyuan Electron " + currentWindow.webContents.userAgent;
 
     // set proxy
     net.fetch(getServer() + "/api/system/getNetwork", {method: "POST"}).then((response) => {
@@ -491,7 +491,7 @@ const initMainWindow = () => {
             currentWindow.show();
             setTimeout(() => { // 等待界面js执行完毕
                 writeLog(siyuanOpenURL);
-                currentWindow.webContents.send("siyuan-open-url", siyuanOpenURL);
+                currentWindow.webContents.send("wellspring-open-url", siyuanOpenURL);
             }, 2000);
         }
     });
@@ -501,7 +501,7 @@ const initMainWindow = () => {
     }
 
     // 菜单
-    const productName = "SiYuan";
+    const productName = "Wellspring";
     const template = [{
         label: productName, submenu: [{
             label: `About ${productName}`, role: "about",
@@ -524,14 +524,14 @@ const initMainWindow = () => {
     windowNavigate(currentWindow, "app");
     currentWindow.on("close", (event) => {
         if (currentWindow && !currentWindow.isDestroyed()) {
-            currentWindow.webContents.send("siyuan-save-close", false);
+            currentWindow.webContents.send("wellspring-save-close", false);
         }
         event.preventDefault();
     });
     workspaces.push({
         browserWindow: currentWindow,
     });
-    ipcMain.once("siyuan-ready-to-show", () => {
+    ipcMain.once("wellspring-ready-to-show", () => {
         if (isOpenAsHidden()) {
             currentWindow.minimize();
         } else {
@@ -581,10 +581,10 @@ const initKernel = (workspace, port, lang) => {
             bootWindow.show();
         }
 
-        const kernelName = "win32" === process.platform ? "SiYuan-Kernel.exe" : "SiYuan-Kernel";
+        const kernelName = "win32" === process.platform ? "Wellspring-Kernel.exe" : "Wellspring-Kernel";
         const kernelPath = path.join(appDir, "kernel", kernelName);
         if (!fs.existsSync(kernelPath)) {
-            showErrorWindow("内核程序丢失", "Kernel program is missing", `<div>内核程序丢失，请重新安装思源，并将思源内核程序加入杀毒软件信任列表。</div><div>The kernel program is not found, please reinstall SiYuan and add SiYuan Kernel prgram into the trust list of your antivirus software.</div><div><i>${kernelPath}</i></div>`);
+            showErrorWindow("内核程序丢失", "Kernel program is missing", `<div>内核程序丢失，请重新安装思源，并将思源内核程序加入杀毒软件信任列表。</div><div>The kernel program is not found, please reinstall Wellspring and add Wellspring Kernel prgram into the trust list of your antivirus software.</div><div><i>${kernelPath}</i></div>`);
             bootWindow.destroy();
             resolve(false);
             return;
@@ -658,7 +658,7 @@ const initKernel = (workspace, port, lang) => {
                                 showWindow(workspaces[0].browserWindow);
                             }
 
-                            errorWindowId = showErrorWindow("工作空间已被锁定", "The workspace is locked", "<div>该工作空间正在被使用，请尝试在任务管理器中结束 SiYuan-Kernel 进程或者重启操作系统后再启动思源。</div><div>The workspace is being used, please try to end the SiYuan-Kernel process in the task manager or restart the operating system and then start SiYuan.</div>");
+                            errorWindowId = showErrorWindow("工作空间已被锁定", "The workspace is locked", "<div>该工作空间正在被使用，请尝试在任务管理器中结束 Wellspring-Kernel 进程或者重启操作系统后再启动思源。</div><div>The workspace is being used, please try to end the Wellspring-Kernel process in the task manager or restart the operating system and then start Wellspring.</div>");
                             break;
                         case 25:
                             errorWindowId = showErrorWindow("初始化工作空间失败", "Failed to create workspace directory", "<div>工作空间文件夹权限不足，请查看 工作空间/temp/siyuan.log 获取详细报错信息</div><div>Insufficient permissions for the workspace folder. Please check workspace/temp/siyuan.log for detailed error information.</div>");
@@ -669,7 +669,7 @@ const initKernel = (workspace, port, lang) => {
                         case 0:
                             break;
                         default:
-                            errorWindowId = showErrorWindow("内核因未知原因退出", "The kernel exited for unknown reasons", `<div>思源内核因未知原因退出 [code=${code}]，请尝试重启操作系统后再启动思源。如果该问题依然发生，请检查杀毒软件是否阻止思源内核启动。</div><div>SiYuan Kernel exited for unknown reasons [code=${code}], please try to reboot your operating system and then start SiYuan again. If occurs this problem still, please check your anti-virus software whether kill the SiYuan Kernel.</div>`);
+                            errorWindowId = showErrorWindow("内核因未知原因退出", "The kernel exited for unknown reasons", `<div>思源内核因未知原因退出 [code=${code}]，请尝试重启操作系统后再启动思源。如果该问题依然发生，请检查杀毒软件是否阻止思源内核启动。</div><div>SiYuan Kernel exited for unknown reasons [code=${code}], please try to reboot your operating system and then start Wellspring again. If occurs this problem still, please check your anti-virus software whether kill the SiYuan Kernel.</div>`);
                             break;
                     }
 
@@ -693,7 +693,7 @@ const initKernel = (workspace, port, lang) => {
                 writeLog("get kernel version failed: " + e.message);
                 if (14 < ++count) {
                     writeLog("get kernel ver failed");
-                    showErrorWindow("获取内核服务端口失败", "Failed to Obtain Kernel Service Port", "<div>获取内核服务端口失败，请确保程序拥有网络权限并不受防火墙和杀毒软件阻止。</div><div>Failed to obtain kernel service port. Please ensure SiYuan has network permissions and is not blocked by firewalls or antivirus software.</div>");
+                    showErrorWindow("获取内核服务端口失败", "Failed to Obtain Kernel Service Port", "<div>获取内核服务端口失败，请确保程序拥有网络权限并不受防火墙和杀毒软件阻止。</div><div>Failed to obtain kernel service port. Please ensure Wellspring has network permissions and is not blocked by firewalls or antivirus software.</div>");
                     bootWindow.destroy();
                     resolve(false);
                     return;
@@ -758,11 +758,11 @@ app.whenReady().then(() => {
         }, {
             label: lang.resetWindow, type: "checkbox", click: v => {
                 resetWindowStateOnRestart = v.checked;
-                mainWindow.webContents.send("siyuan-save-close", true);
+                mainWindow.webContents.send("wellspring-save-close", true);
             },
         }, {
             label: lang.quit, click: () => {
-                mainWindow.webContents.send("siyuan-save-close", true);
+                mainWindow.webContents.send("wellspring-save-close", true);
             },
         },];
 
@@ -810,7 +810,7 @@ app.whenReady().then(() => {
     const getWindowByContentId = (id) => {
         return BrowserWindow.getAllWindows().find((win) => win.webContents.id === id);
     };
-    ipcMain.on("siyuan-context-menu", (event, langs) => {
+    ipcMain.on("wellspring-context-menu", (event, langs) => {
         const template = [new MenuItem({
             role: "undo", label: langs.undo
         }), new MenuItem({
@@ -831,17 +831,17 @@ app.whenReady().then(() => {
         const menu = Menu.buildFromTemplate(template);
         menu.popup({window: BrowserWindow.fromWebContents(event.sender)});
     });
-    ipcMain.on("siyuan-confirm-dialog", (event, options) => {
+    ipcMain.on("wellspring-confirm-dialog", (event, options) => {
         event.returnValue = dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender) || BrowserWindow.getFocusedWindow(), options);
     });
-    ipcMain.on("siyuan-alert-dialog", (event, options) => {
+    ipcMain.on("wellspring-alert-dialog", (event, options) => {
         dialog.showMessageBoxSync(BrowserWindow.fromWebContents(event.sender) || BrowserWindow.getFocusedWindow(), options);
         event.returnValue = undefined;
     });
-    ipcMain.on("siyuan-first-quit", () => {
+    ipcMain.on("wellspring-first-quit", () => {
         app.exit();
     });
-    ipcMain.handle("siyuan-get", (event, data) => {
+    ipcMain.handle("wellspring-get", (event, data) => {
         if (data.cmd === "clipboardRead") {
             return clipboard.read(data.format);
         }
@@ -888,7 +888,7 @@ app.whenReady().then(() => {
                 throw e;
             }
         }
-        if (data.cmd === "siyuan-open-file") {
+        if (data.cmd === "wellspring-open-file") {
             let hasMatch = false;
             BrowserWindow.getAllWindows().find(item => {
                 const url = new URL(item.webContents.getURL());
@@ -899,7 +899,7 @@ app.whenReady().then(() => {
                 const options = JSON.parse(data.options);
                 if (ids.includes(options.rootID) || ids.includes(options.assetPath)) {
                     item.focus();
-                    item.webContents.send("siyuan-open-file", options);
+                    item.webContents.send("wellspring-open-file", options);
                     hasMatch = true;
                     return true;
                 }
@@ -909,7 +909,7 @@ app.whenReady().then(() => {
     });
 
     const initEventId = [];
-    ipcMain.on("siyuan-event", (event) => {
+    ipcMain.on("wellspring-event", (event) => {
         if (initEventId.includes(event.sender.id)) {
             return;
         }
@@ -920,28 +920,28 @@ app.whenReady().then(() => {
         }
         latestActiveWindow = currentWindow;
         currentWindow.on("focus", () => {
-            event.sender.send("siyuan-event", "focus");
+            event.sender.send("wellspring-event", "focus");
             latestActiveWindow = currentWindow;
         });
         currentWindow.on("blur", () => {
-            event.sender.send("siyuan-event", "blur");
+            event.sender.send("wellspring-event", "blur");
         });
         if ("darwin" !== process.platform) {
             currentWindow.on("maximize", () => {
-                event.sender.send("siyuan-event", "maximize");
+                event.sender.send("wellspring-event", "maximize");
             });
             currentWindow.on("unmaximize", () => {
-                event.sender.send("siyuan-event", "unmaximize");
+                event.sender.send("wellspring-event", "unmaximize");
             });
         }
         currentWindow.on("enter-full-screen", () => {
-            event.sender.send("siyuan-event", "enter-full-screen");
+            event.sender.send("wellspring-event", "enter-full-screen");
         });
         currentWindow.on("leave-full-screen", () => {
-            event.sender.send("siyuan-event", "leave-full-screen");
+            event.sender.send("wellspring-event", "leave-full-screen");
         });
     });
-    ipcMain.on("siyuan-cmd", (event, data) => {
+    ipcMain.on("wellspring-cmd", (event, data) => {
         let cmd = data;
         let webContentsId = event.sender.id;
         if (typeof data !== "string") {
@@ -1072,7 +1072,7 @@ app.whenReady().then(() => {
                 break;
         }
     });
-    ipcMain.on("siyuan-config-tray", (event, data) => {
+    ipcMain.on("wellspring-config-tray", (event, data) => {
         workspaces.find(item => {
             if (item.browserWindow.webContents.id === event.sender.id) {
                 hideWindow(item.browserWindow);
@@ -1083,7 +1083,7 @@ app.whenReady().then(() => {
             }
         });
     });
-    ipcMain.on("siyuan-export-pdf", (event, data) => {
+    ipcMain.on("wellspring-export-pdf", (event, data) => {
         dialog.showOpenDialog({
             title: data.title, properties: ["createDirectory", "openDirectory"],
         }).then((result) => {
@@ -1093,10 +1093,10 @@ app.whenReady().then(() => {
             }
             data.filePaths = result.filePaths;
             data.webContentsId = event.sender.id;
-            getWindowByContentId(data.parentWindowId).send("siyuan-export-pdf", data);
+            getWindowByContentId(data.parentWindowId).send("wellspring-export-pdf", data);
         });
     });
-    ipcMain.on("siyuan-export-newwindow", (event, data) => {
+    ipcMain.on("wellspring-export-newwindow", (event, data) => {
         // The PDF/Word export preview window automatically adjusts according to the size of the main window https://github.com/siyuan-note/siyuan/issues/10554
         const wndBounds = getWindowByContentId(event.sender.id).getBounds();
         const wndScreen = screen.getDisplayNearestPoint({x: wndBounds.x, y: wndBounds.y});
@@ -1117,14 +1117,14 @@ app.whenReady().then(() => {
             },
         });
         printWin.center();
-        printWin.webContents.userAgent = "SiYuan/" + appVer + " https://b3log.org/siyuan Electron " + printWin.webContents.userAgent;
+        printWin.webContents.userAgent = "Wellspring/" + appVer + " https://b3log.org/siyuan Electron " + printWin.webContents.userAgent;
         printWin.loadURL(data);
         windowNavigate(printWin, "export");
     });
-    ipcMain.on("siyuan-quit", (event, port) => {
+    ipcMain.on("wellspring-quit", (event, port) => {
         exitApp(port);
     });
-    ipcMain.on("siyuan-show-window", (event) => {
+    ipcMain.on("wellspring-show-window", (event) => {
         const mainWindow = getWindowByContentId(event.sender.id);
         if (!mainWindow) {
             return;
@@ -1135,7 +1135,7 @@ app.whenReady().then(() => {
         }
         mainWindow.show();
     });
-    ipcMain.on("siyuan-open-window", (event, data) => {
+    ipcMain.on("wellspring-open-window", (event, data) => {
         const mainWindow = BrowserWindow.getFocusedWindow() || BrowserWindow.getAllWindows()[0];
         const mainBounds = mainWindow.getBounds();
         const mainScreen = screen.getDisplayNearestPoint({x: mainBounds.x, y: mainBounds.y});
@@ -1166,13 +1166,13 @@ app.whenReady().then(() => {
         } else {
             win.center();
         }
-        win.webContents.userAgent = "SiYuan/" + appVer + " https://b3log.org/siyuan Electron " + win.webContents.userAgent;
+        win.webContents.userAgent = "Wellspring/" + appVer + " https://b3log.org/siyuan Electron " + win.webContents.userAgent;
         win.webContents.session.setSpellCheckerLanguages(["en-US"]);
         win.loadURL(data.url);
         windowNavigate(win, "window");
         win.on("close", (event) => {
             if (win && !win.isDestroyed()) {
-                win.webContents.send("siyuan-save-close");
+                win.webContents.send("wellspring-save-close");
             }
             event.preventDefault();
         });
@@ -1181,7 +1181,7 @@ app.whenReady().then(() => {
             win.setBounds(targetScreen.workArea);
         }
     });
-    ipcMain.on("siyuan-open-workspace", (event, data) => {
+    ipcMain.on("wellspring-open-workspace", (event, data) => {
         const foundWorkspace = workspaces.find((item) => {
             if (item.workspaceDir === data.workspace) {
                 showWindow(item.browserWindow);
@@ -1196,7 +1196,7 @@ app.whenReady().then(() => {
             });
         }
     });
-    ipcMain.handle("siyuan-init", async (event, data) => {
+    ipcMain.handle("wellspring-init", async (event, data) => {
         const exitWS = workspaces.find(item => {
             if (event.sender.id === item.browserWindow.webContents.id && item.workspaceDir) {
                 if (item.tray && "win32" === process.platform || "linux" === process.platform) {
@@ -1217,7 +1217,7 @@ app.whenReady().then(() => {
                 if ("win32" === process.platform || "linux" === process.platform) {
                     // 系统托盘
                     tray = new Tray(path.join(appDir, "stage", "icon-large.png"));
-                    tray.setToolTip(`${path.basename(data.workspaceDir)} - SiYuan v${appVer}`);
+                    tray.setToolTip(`${path.basename(data.workspaceDir)} - Wellspring v${appVer}`);
                     const mainWindow = getWindowByContentId(event.sender.id);
                     if (!mainWindow || mainWindow.isDestroyed()) {
                         return;
@@ -1233,7 +1233,7 @@ app.whenReady().then(() => {
         });
         await net.fetch(getServer(data.port) + "/api/system/uiproc?pid=" + process.pid, {method: "POST"});
     });
-    ipcMain.on("siyuan-hotkey", (event, data) => {
+    ipcMain.on("wellspring-hotkey", (event, data) => {
         if (!data.hotkeys || data.hotkeys.length === 0) {
             return;
         }
@@ -1294,7 +1294,7 @@ app.whenReady().then(() => {
             } else {
                 globalShortcut.register(shortcut, () => {
                     BrowserWindow.getAllWindows().forEach(itemB => {
-                        itemB.webContents.send("siyuan-hotkey", {
+                        itemB.webContents.send("wellspring-hotkey", {
                             hotkey: item
                         });
                     });
@@ -1302,12 +1302,12 @@ app.whenReady().then(() => {
             }
         });
     });
-    ipcMain.on("siyuan-send-windows", (event, data) => {
+    ipcMain.on("wellspring-send-windows", (event, data) => {
         BrowserWindow.getAllWindows().forEach(item => {
-            item.webContents.send("siyuan-send-windows", data);
+            item.webContents.send("wellspring-send-windows", data);
         });
     });
-    ipcMain.on("siyuan-auto-launch", (event, data) => {
+    ipcMain.on("wellspring-auto-launch", (event, data) => {
         app.setLoginItemSettings({
             openAtLogin: data.openAtLogin,
             args: data.openAsHidden ? ["--openAsHidden"] : ""
@@ -1344,7 +1344,7 @@ app.whenReady().then(() => {
         });
         firstOpenWindow.show();
         // 初始化启动
-        ipcMain.on("siyuan-first-init", (event, data) => {
+        ipcMain.on("wellspring-first-init", (event, data) => {
             initKernel(data.workspace, "", data.lang).then((isSucc) => {
                 if (isSucc) {
                     initMainWindow();
@@ -1420,7 +1420,7 @@ app.whenReady().then(() => {
     powerMonitor.on("lock-screen", () => {
         writeLog("system lock-screen");
         BrowserWindow.getAllWindows().forEach(item => {
-            item.webContents.send("siyuan-send-windows", {cmd: "lockscreenByMode"});
+            item.webContents.send("wellspring-send-windows", {cmd: "lockscreenByMode"});
         });
     });
 });
@@ -1444,7 +1444,7 @@ app.on("open-url", async (event, url) => { // for macOS
         }
         workspaces.forEach(item => {
             if (item.browserWindow && !item.browserWindow.isDestroyed()) {
-                item.browserWindow.webContents.send("siyuan-open-url", url);
+                item.browserWindow.webContents.send("wellspring-open-url", url);
             }
         });
     }
@@ -1487,7 +1487,7 @@ app.on("second-instance", (event, argv) => {
     const siyuanURL = argv.find((arg) => arg.startsWith("siyuan://"));
     workspaces.forEach(item => {
         if (item.browserWindow && !item.browserWindow.isDestroyed() && siyuanURL) {
-            item.browserWindow.webContents.send("siyuan-open-url", siyuanURL);
+            item.browserWindow.webContents.send("wellspring-open-url", siyuanURL);
         }
     });
 
@@ -1524,7 +1524,7 @@ app.on("before-quit", (event) => {
     workspaces.forEach(item => {
         if (item.browserWindow && !item.browserWindow.isDestroyed()) {
             event.preventDefault();
-            item.browserWindow.webContents.send("siyuan-save-close", true);
+            item.browserWindow.webContents.send("wellspring-save-close", true);
         }
     });
 });

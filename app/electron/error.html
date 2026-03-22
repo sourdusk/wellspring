@@ -211,11 +211,11 @@
     }
     document.getElementById('close').addEventListener('click', () => {
         const {ipcRenderer} = require('electron');
-        ipcRenderer.send("siyuan-cmd", "destroy");
+        ipcRenderer.send("wellspring-cmd", "destroy");
     });
     document.getElementById('min').addEventListener('click', () => {
         const {ipcRenderer} = require('electron');
-        ipcRenderer.send("siyuan-cmd", "minimize");
+        ipcRenderer.send("wellspring-cmd", "minimize");
     });
 
     // LOGO和版本号

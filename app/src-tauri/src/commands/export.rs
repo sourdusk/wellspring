@@ -31,7 +31,7 @@ pub async fn export_new_window(
         &label,
         tauri::WebviewUrl::External(full_url.parse().unwrap()),
     )
-    .title("SiYuan Export")
+    .title("Wellspring Export")
     .inner_size(1200.0, 750.0)
     .build()
     .map_err(|e| e.to_string())?;

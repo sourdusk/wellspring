@@ -54,7 +54,7 @@ pub fn spawn_kernel(app: &AppHandle, port: u16, workspace_dir: &str, lang: &str)
     ];
 
     let (mut rx, child) = app.shell()
-        .sidecar("SiYuan-Kernel")
+        .sidecar("Wellspring-Kernel")
         .expect("failed to find sidecar binary")
         .args(&args)
         .spawn()

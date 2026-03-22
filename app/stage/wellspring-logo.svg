@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Base pool -->
+  <path d="M 140 380 C 180 355, 332 355, 372 380"
+        fill="none" stroke="#6a9beb" stroke-width="16" stroke-linecap="round"/>
+
+  <!-- Five angular jets as filled triangles (pointed/tapered) -->
+
+  <!-- Far left -->
+  <polygon points="130,215 192,365 208,355" fill="#6a9beb"/>
+
+  <!-- Inner left -->
+  <polygon points="198,175 220,370 236,360" fill="#6a9beb"/>
+
+  <!-- Center -->
+  <polygon points="256,145 248,368 264,368" fill="#6a9beb"/>
+
+  <!-- Inner right -->
+  <polygon points="314,175 276,360 292,370" fill="#6a9beb"/>
+
+  <!-- Far right -->
+  <polygon points="382,215 304,355 320,365" fill="#6a9beb"/>
+</svg>

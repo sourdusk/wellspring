@@ -12,7 +12,7 @@ use tauri::menu::{Menu, MenuItem};
 use tauri_plugin_global_shortcut::{GlobalShortcutExt, Shortcut, Builder as GlobalShortcutBuilder};
 
 #[tauri::command]
-async fn siyuan_init(
+async fn wellspring_init(
     app: tauri::AppHandle,
     _data: serde_json::Value,
 ) -> Result<serde_json::Value, String> {
@@ -92,7 +92,7 @@ async fn send_to_windows(
     app: tauri::AppHandle,
     data: serde_json::Value,
 ) -> Result<(), String> {
-    app.emit("siyuan-send-windows", &data).map_err(|e| e.to_string())
+    app.emit("wellspring-send-windows", &data).map_err(|e| e.to_string())
 }
 
 #[tauri::command]
@@ -129,7 +129,7 @@ fn main() {
         .plugin(tauri_plugin_process::init())
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
-            siyuan_init,
+            wellspring_init,
             register_hotkey,
             set_auto_launch,
             first_init,
@@ -225,11 +225,11 @@ fn main() {
             #[cfg(any(target_os = "linux", target_os = "windows"))]
             {
                 use tauri_plugin_deep_link::DeepLinkExt;
-                let _ = app.deep_link().register("siyuan");
+                let _ = app.deep_link().register("wellspring");
             }
 
             // Build system tray
-            let show_item = MenuItem::with_id(app, "show", "Show SiYuan", true, None::<&str>)
+            let show_item = MenuItem::with_id(app, "show", "Show Wellspring", true, None::<&str>)
                 .map_err(|e| e.to_string())?;
             let quit_item = MenuItem::with_id(app, "quit", "Quit", true, None::<&str>)
                 .map_err(|e| e.to_string())?;
@@ -271,7 +271,7 @@ fn main() {
 
             // Spawn kernel
             let workspace_dir = dirs::home_dir()
-                .map(|d| d.join("SiYuan").to_string_lossy().to_string())
+                .map(|d| d.join("Wellspring").to_string_lossy().to_string())
                 .unwrap_or_default();
 
             match kernel::spawn_kernel(&app_handle, port, &workspace_dir, "en_US") {
@@ -321,11 +321,11 @@ fn main() {
                 tauri::WindowEvent::CloseRequested { api, .. } => {
                     // Prevent immediate close — let frontend handle save/close flow
                     api.prevent_close();
-                    let _ = window.emit("siyuan-save-close", ());
+                    let _ = window.emit("wellspring-save-close", ());
                 }
                 tauri::WindowEvent::Focused(focused) => {
                     let event_type = if *focused { "focus" } else { "blur" };
-                    let _ = window.emit("siyuan-event", event_type);
+                    let _ = window.emit("wellspring-event", event_type);
                 }
                 tauri::WindowEvent::Resized(size) => {
                     // size is PhysicalSize — convert to logical for save/restore consistency

@@ -181,7 +181,7 @@ export const globalCommand = (command: string, app: App) => {
                     return true;
                 }
                 if (childData.instance === "Custom") {
-                    let exit = childData.customModelType === "siyuan-card";
+                    let exit = childData.customModelType === "wellspring-card";
                     if (!exit) {
                         app.plugins.find(p => {
                             if (p.models[childData.customModelType]) {

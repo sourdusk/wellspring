@@ -332,7 +332,7 @@ export const copyTab = (app: App, tab: Tab) => {
                 });
             } else if (tab.model instanceof Custom) {
                 const custom = tab.model as Custom;
-                if (custom.type === "siyuan-card") {
+                if (custom.type === "wellspring-card") {
                     model = newCardModel({
                         app,
                         tab: newTab,

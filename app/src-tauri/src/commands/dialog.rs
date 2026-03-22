@@ -6,7 +6,7 @@ pub async fn show_confirm_dialog(
     app: AppHandle,
     data: serde_json::Value,
 ) -> Result<bool, String> {
-    let title = data.get("title").and_then(|v| v.as_str()).unwrap_or("SiYuan");
+    let title = data.get("title").and_then(|v| v.as_str()).unwrap_or("Wellspring");
     let message = data.get("message").and_then(|v| v.as_str()).unwrap_or("");
 
     let confirmed = app.dialog()
@@ -23,7 +23,7 @@ pub async fn show_alert_dialog(
     app: AppHandle,
     data: serde_json::Value,
 ) -> Result<(), String> {
-    let title = data.get("title").and_then(|v| v.as_str()).unwrap_or("SiYuan");
+    let title = data.get("title").and_then(|v| v.as_str()).unwrap_or("Wellspring");
     let message = data.get("message").and_then(|v| v.as_str()).unwrap_or("");
 
     app.dialog()

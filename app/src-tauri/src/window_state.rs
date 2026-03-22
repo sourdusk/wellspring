@@ -37,7 +37,7 @@ impl Default for WindowState {
 fn state_path() -> PathBuf {
     let config_dir = dirs::config_dir()
         .unwrap_or_else(|| PathBuf::from("."))
-        .join("siyuan");
+        .join("wellspring");
     fs::create_dir_all(&config_dir).ok();
     config_dir.join("windowState.json")
 }

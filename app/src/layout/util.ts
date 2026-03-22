@@ -468,7 +468,7 @@ export const JSONToLayout = (app: App, isStart: boolean) => {
         const initData = item.getAttribute("data-initdata");
         if (initData) {
             const initDataObj = JSON.parse(initData);
-            if (initDataObj.instance === "Custom" && initDataObj.customModelType !== "siyuan-card") {
+            if (initDataObj.instance === "Custom" && initDataObj.customModelType !== "wellspring-card") {
                 let hasPlugin = false;
                 app.plugins.find(plugin => {
                     if (Object.keys(plugin.models).includes(initDataObj.customModelType)) {
@@ -725,7 +725,7 @@ export const resizeTopBar = () => {
 export const newModelByInitData = (app: App, tab: Tab, json: any) => {
     let model: Model;
     if (json.instance === "Custom") {
-        if (json.customModelType === "siyuan-card") {
+        if (json.customModelType === "wellspring-card") {
             model = newCardModel({
                 app,
                 tab: tab,

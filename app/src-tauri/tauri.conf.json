@@ -1,6 +1,6 @@
 {
-  "productName": "SiYuan",
-  "identifier": "org.b3log.siyuan",
+  "productName": "Wellspring",
+  "identifier": "org.b3log.wellspring",
   "version": "3.6.1",
   "build": {
     "frontendDist": "../stage/build/tauri",
@@ -10,7 +10,7 @@
     "windows": [
       {
         "label": "main",
-        "title": "SiYuan",
+        "title": "Wellspring",
         "width": 1280,
         "height": 800,
         "minWidth": 493,
@@ -35,7 +35,7 @@
       "icons/icon.ico"
     ],
     "externalBin": [
-      "kernel/SiYuan-Kernel"
+      "kernel/Wellspring-Kernel"
     ],
     "targets": "all"
   }

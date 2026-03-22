@@ -431,7 +431,7 @@
     })
     document.getElementById('min').addEventListener('click', () => {
         const {ipcRenderer} = require('electron')
-        ipcRenderer.send("siyuan-cmd", "minimize");
+        ipcRenderer.send("wellspring-cmd", "minimize");
     })
 
     document.querySelectorAll('.choosePath').forEach((item) => {
@@ -449,7 +449,7 @@
             }
 
             const {ipcRenderer} = require('electron')
-            const result = await ipcRenderer.invoke("siyuan-get", {
+            const result = await ipcRenderer.invoke("wellspring-get", {
                 cmd: "showOpenDialog",
                 defaultPath: defaultWorkspace,
                 properties: ['openDirectory', 'createDirectory'],

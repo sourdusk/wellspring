@@ -170,7 +170,7 @@ openTab = (options: {
                     id: options.card.id || "",
                     title: options.card.title,
                 },
-                id: "siyuan-card"
+                id: "wellspring-card"
             },
         });
     }

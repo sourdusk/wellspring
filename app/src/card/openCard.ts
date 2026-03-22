@@ -522,7 +522,7 @@ export const bindCardEvent = async (options: {
                                     id: docId,
                                     title: options.title
                                 },
-                                id: "siyuan-card"
+                                id: "wellspring-card"
                             },
                         });
                         options.dialog.destroy();
@@ -546,7 +546,7 @@ export const bindCardEvent = async (options: {
                                     id: docId,
                                     title: options.title
                                 },
-                                id: "siyuan-card"
+                                id: "wellspring-card"
                             },
                         });
                         options.dialog.destroy();
@@ -564,7 +564,7 @@ export const bindCardEvent = async (options: {
                             "instance": "Tab",
                             "children": {
                                 "instance": "Custom",
-                                "customModelType": "siyuan-card",
+                                "customModelType": "wellspring-card",
                                 "customModelData": {
                                     "cardsData": options.cardsData,
                                     "index": index,
