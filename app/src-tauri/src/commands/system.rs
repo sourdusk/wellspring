@@ -32,11 +32,8 @@ pub async fn cmd_show_item_in_folder(app: AppHandle, data: serde_json::Value) ->
 
 #[tauri::command]
 pub async fn cmd_open_dev_tools(window: tauri::Window) -> Result<(), String> {
-    #[cfg(debug_assertions)]
-    {
-        if let Some(webview) = window.get_webview_window(window.label()) {
-            webview.open_devtools();
-        }
+    if let Some(webview) = window.get_webview_window(window.label()) {
+        webview.open_devtools();
     }
     Ok(())
 }
@@ -72,6 +69,13 @@ pub async fn cmd_set_spell_checker_languages() -> Result<(), String> {
     // Spell checker is managed by the webview natively in Tauri
     log::info!("setSpellCheckerLanguages requested (webview-managed in Tauri)");
     Ok(())
+}
+
+#[tauri::command]
+pub async fn get_available_spell_checker_languages() -> Result<Vec<String>, String> {
+    // WebView2 manages spell checking natively; return empty list
+    // TODO: query WebView2 for available languages if needed
+    Ok(vec![])
 }
 
 #[tauri::command]

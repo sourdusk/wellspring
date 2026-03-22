@@ -160,6 +160,7 @@ fn main() {
             commands::system::cmd_redo,
             commands::system::cmd_write_log,
             commands::system::cmd_set_spell_checker_languages,
+            commands::system::get_available_spell_checker_languages,
             commands::system::cmd_set_traffic_light_position,
             commands::system::register_window_events,
             commands::dialog::show_confirm_dialog,
@@ -181,7 +182,36 @@ fn main() {
             if let Some(window) = app.get_webview_window("main") {
                 let _ = window.set_size(tauri::LogicalSize::new(ws.width, ws.height));
                 if let (Some(x), Some(y)) = (ws.x, ws.y) {
-                    let _ = window.set_position(tauri::LogicalPosition::new(x, y));
+                    // Verify the position is visible on at least one monitor
+                    let position_ok = if let Ok(monitors) = window.available_monitors() {
+                        if monitors.is_empty() {
+                            true // No monitor info available, trust the saved state
+                        } else {
+                            let scale = window.scale_factor().unwrap_or(1.0);
+                            monitors.iter().any(|m| {
+                                let pos = m.position();
+                                let size = m.size();
+                                // Convert monitor physical bounds to logical
+                                let mx = pos.x as f64 / scale;
+                                let my = pos.y as f64 / scale;
+                                let mw = size.width as f64 / scale;
+                                let mh = size.height as f64 / scale;
+                                // Check that at least part of the title bar (top 50px)
+                                // is within this monitor's bounds
+                                x < mx + mw && x + ws.width > mx
+                                    && y < my + mh && y + 50.0 > my
+                            })
+                        }
+                    } else {
+                        true // Can't query monitors, trust saved state
+                    };
+
+                    if position_ok {
+                        let _ = window.set_position(tauri::LogicalPosition::new(x, y));
+                    } else {
+                        log::warn!("Saved window position ({}, {}) is off-screen, centering window", x, y);
+                        let _ = window.center();
+                    }
                 }
                 if ws.maximized {
                     let _ = window.maximize();
@@ -274,6 +304,11 @@ fn main() {
                 if let Some(window) = app_handle2.get_webview_window("main") {
                     let url = format!("http://127.0.0.1:{}/stage/build/tauri/", port);
                     let _ = window.navigate(url.parse().unwrap());
+                    // Give the page a moment to load, then show the window
+                    // The frontend also calls show() via bridge, but this is a fallback
+                    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+                    let _ = window.show();
+                    let _ = window.set_focus();
                 }
 
                 let _ = app_handle2.emit("kernel-ready", port);
@@ -293,12 +328,14 @@ fn main() {
                     let _ = window.emit("siyuan-event", event_type);
                 }
                 tauri::WindowEvent::Resized(size) => {
+                    // size is PhysicalSize — convert to logical for save/restore consistency
                     if window.label() == "main" {
+                        let scale = window.scale_factor().unwrap_or(1.0);
                         let ws = window_state::WindowState {
-                            width: size.width as f64,
-                            height: size.height as f64,
-                            x: window.outer_position().ok().map(|p| p.x as f64),
-                            y: window.outer_position().ok().map(|p| p.y as f64),
+                            width: size.width as f64 / scale,
+                            height: size.height as f64 / scale,
+                            x: window.outer_position().ok().map(|p| p.x as f64 / scale),
+                            y: window.outer_position().ok().map(|p| p.y as f64 / scale),
                             fullscreen: window.is_fullscreen().unwrap_or(false),
                             maximized: window.is_maximized().unwrap_or(false),
                         };
@@ -306,13 +343,15 @@ fn main() {
                     }
                 }
                 tauri::WindowEvent::Moved(position) => {
+                    // position is PhysicalPosition — convert to logical for save/restore consistency
                     if window.label() == "main" {
+                        let scale = window.scale_factor().unwrap_or(1.0);
                         if let Ok(size) = window.inner_size() {
                             let ws = window_state::WindowState {
-                                width: size.width as f64,
-                                height: size.height as f64,
-                                x: Some(position.x as f64),
-                                y: Some(position.y as f64),
+                                width: size.width as f64 / scale,
+                                height: size.height as f64 / scale,
+                                x: Some(position.x as f64 / scale),
+                                y: Some(position.y as f64 / scale),
                                 fullscreen: window.is_fullscreen().unwrap_or(false),
                                 maximized: window.is_maximized().unwrap_or(false),
                             };

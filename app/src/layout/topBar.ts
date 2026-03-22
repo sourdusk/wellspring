@@ -300,7 +300,11 @@ export const setZoom = (type: "zoomIn" | "zoomOut" | "restore") => {
     });
     /// #endif
     /// #if TAURI
-    document.documentElement.style.setProperty("zoom", String(zoom));
+    if (zoom !== 1) {
+        document.documentElement.style.setProperty("zoom", String(zoom));
+    } else {
+        document.documentElement.style.removeProperty("zoom");
+    }
     send(Constants.SIYUAN_CMD, {
         cmd: "setTrafficLightPosition",
         zoom,

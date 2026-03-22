@@ -46,7 +46,7 @@ import {movePathTo, useShell} from "../../util/pathName";
 import {hintMoveBlock} from "../hint/extend";
 import {makeCard, quickMakeCard} from "../../card/makeCard";
 import {transferBlockRef} from "../../menus/block";
-import {isMobile} from "../../util/functions";
+import {getFixedPositionScale, isMobile} from "../../util/functions";
 import {AIActions} from "../../ai/actions";
 import {activeBlur, renderTextMenu, showKeyboardToolbarUtil} from "../../mobile/util/keyboardToolbar";
 import {hideTooltip} from "../../dialog/tooltip";
@@ -2697,7 +2697,11 @@ data-type="fold" style="cursor:inherit;"><svg style="width: 10px${fold && fold =
                 marginHeight = 8;
             }
         }
-        this.element.style.top = `${Math.max(rect.top, contentTop) + marginHeight}px`;
+        // WebView2 at non-100% DPI may scale position:fixed coordinates differently
+        // from getBoundingClientRect() values; apply correction factor
+        const fpScale = getFixedPositionScale();
+        const computedTop = Math.max(rect.top, contentTop) + marginHeight;
+        this.element.style.top = `${computedTop * fpScale}px`;
         let left = rect.left - this.element.clientWidth - space;
         if ((nodeElement.getAttribute("data-type") === "NodeBlockQueryEmbed" && this.element.childElementCount === 1)) {
             // 嵌入块为列表时
@@ -2706,11 +2710,11 @@ data-type="fold" style="cursor:inherit;"><svg style="width: 10px${fold && fold =
             // 为数据库行
             left = nodeElement.getBoundingClientRect().left - this.element.clientWidth - space + parseInt(getComputedStyle(nodeElement).paddingLeft);
         }
-        this.element.style.left = `${left}px`;
+        this.element.style.left = `${left * fpScale}px`;
         if (left < this.element.parentElement.getBoundingClientRect().left) {
             this.element.style.width = "24px";
             // 需加 2，否则和折叠标题无法对齐
-            this.element.style.left = `${rect.left - this.element.clientWidth - space / 2 + 3}px`;
+            this.element.style.left = `${(rect.left - this.element.clientWidth - space / 2 + 3) * fpScale}px`;
             html = "";
             Array.from(this.element.children).reverse().forEach((item, index) => {
                 if (index !== 0) {

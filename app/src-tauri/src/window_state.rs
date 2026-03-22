@@ -44,10 +44,19 @@ fn state_path() -> PathBuf {
 
 pub fn load() -> WindowState {
     let path = state_path();
-    match fs::read_to_string(&path) {
+    let state = match fs::read_to_string(&path) {
         Ok(content) => serde_json::from_str(&content).unwrap_or_default(),
         Err(_) => WindowState::default(),
+    };
+    // Basic sanity check: reject absurd sizes (position is validated
+    // against actual monitor geometry in main.rs)
+    if state.width < 200.0 || state.height < 200.0
+        || state.width > 20000.0 || state.height > 20000.0
+    {
+        log::warn!("Saved window size ({} x {}) is out of range, using defaults", state.width, state.height);
+        return WindowState::default();
     }
+    state
 }
 
 pub fn save(state: &WindowState) {

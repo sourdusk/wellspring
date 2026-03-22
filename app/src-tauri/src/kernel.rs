@@ -24,14 +24,27 @@ pub fn find_available_port() -> u16 {
 }
 
 pub fn spawn_kernel(app: &AppHandle, port: u16, workspace_dir: &str, lang: &str) -> Result<CommandChild, String> {
-    // In dev mode, resources are in the app/ directory (parent of src-tauri/)
-    // In production, they're in the resource_dir() provided by Tauri
+    // Determine the working directory that contains the stage/ folder.
+    // In dev mode, it's the app/ directory (parent of src-tauri/).
+    // In production (bundled), it's resource_dir().
+    // For --no-bundle release builds, resource_dir() won't have stage/,
+    // so we fall back to the compile-time CARGO_MANIFEST_DIR parent.
     let wd = if cfg!(dev) {
         let manifest_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
         manifest_dir.parent().unwrap().to_string_lossy().to_string()
     } else {
-        app.path().resource_dir().unwrap().to_string_lossy().to_string()
+        let resource = app.path().resource_dir().unwrap();
+        if resource.join("stage").exists() {
+            resource.to_string_lossy().to_string()
+        } else {
+            // --no-bundle: resources aren't bundled, fall back to source tree
+            let manifest_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+            let source_dir = manifest_dir.parent().unwrap().to_string_lossy().to_string();
+            log::info!("resource_dir {:?} has no stage/, falling back to {}", resource, source_dir);
+            source_dir
+        }
     };
+    log::info!("Kernel working directory: {}", wd);
 
     let args = vec![
         "--port".to_string(), port.to_string(),

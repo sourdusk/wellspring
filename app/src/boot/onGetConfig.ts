@@ -60,7 +60,9 @@ export const onGetConfig = (isStart: boolean, app: App) => {
         workspaceDir: window.siyuan.config.system.workspaceDir,
         port: location.port
     });
-    document.documentElement.style.setProperty("zoom", String(window.siyuan.storage[Constants.LOCAL_ZOOM]));
+    if (window.siyuan.storage[Constants.LOCAL_ZOOM] !== 1) {
+        document.documentElement.style.setProperty("zoom", String(window.siyuan.storage[Constants.LOCAL_ZOOM]));
+    }
     send(Constants.SIYUAN_CMD, {
         cmd: "setTrafficLightPosition",
         zoom: window.siyuan.storage[Constants.LOCAL_ZOOM],

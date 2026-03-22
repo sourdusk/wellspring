@@ -31,6 +31,9 @@ import {setFold, zoomOut} from "../../menus/protyle";
 /// #if !TAURI
 import {webUtils} from "electron";
 /// #endif
+/// #if TAURI
+import {uploadFiles} from "../upload";
+/// #endif
 import {dragUpload} from "../render/av/asset";
 /// #else
 import {uploadFiles} from "../upload";
@@ -1169,6 +1172,9 @@ export const dropEvent = (protyle: IProtyle, editorElement: HTMLElement) => {
                     }
                     uploadLocalFiles(files, protyle, !event.altKey);
                     /// #endif
+                    /// #if TAURI
+                    uploadFiles(protyle, event.dataTransfer.files);
+                    /// #endif
                 } else {
                     paste(protyle, event);
                 }
@@ -1187,6 +1193,10 @@ export const dropEvent = (protyle: IProtyle, editorElement: HTMLElement) => {
                             });
                         }
                         dragUpload(files, protyle, cellElement);
+                        /// #endif
+                        /// #if TAURI
+                        focusBlock(hasClosestBlock(cellElement) as HTMLElement);
+                        uploadFiles(protyle, event.dataTransfer.files, undefined);
                         /// #endif
                         /// #endif
                         /// #if BROWSER
@@ -1243,6 +1253,10 @@ export const dropEvent = (protyle: IProtyle, editorElement: HTMLElement) => {
                 }
             }
             // 使用 event.preventDefault(); 会导致无光标 https://github.com/siyuan-note/siyuan/issues/12857
+            /// #if TAURI
+            // Tauri uses standard browser drag-drop; preventDefault required for drop event to fire
+            event.preventDefault();
+            /// #endif
             return;
         }
 

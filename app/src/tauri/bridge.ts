@@ -76,7 +76,12 @@ export async function invokeHandler(channel: string, data?: any): Promise<any> {
         case "siyuan-get": {
             const cmd = data?.cmd;
             if (cmd) {
-                return invoke(`get_${toSnakeCase(cmd)}`, {data});
+                try {
+                    return await invoke(`get_${toSnakeCase(cmd)}`, {data});
+                } catch (e) {
+                    console.warn(`[tauri bridge] siyuan-get command failed: get_${toSnakeCase(cmd)}`, e);
+                    return null;
+                }
             }
             return null;
         }

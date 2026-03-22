@@ -73,6 +73,37 @@ export const isDynamicRef = (text: string) => {
     return /^\(\(\d{14}-\w{7} '.*'\)\)$/.test(text);
 };
 
+// Compute the correction factor for position:fixed coordinates in WebView2.
+// When CSS zoom is applied (e.g., via document.documentElement.style.zoom in Tauri),
+// getBoundingClientRect() returns viewport coordinates but position:fixed CSS values
+// are interpreted in the zoomed coordinate space. This causes a mismatch where setting
+// style.top = rect.top results in the element appearing at rect.top * zoom instead.
+// Additionally, WebView2 at non-100% DPI may apply its own implicit scaling.
+// This factor corrects both sources of mismatch by measuring actual vs expected position.
+let _fixedPositionScale: number | undefined;
+let _fixedPositionScaleZoom: string | undefined;
+export const getFixedPositionScale = (): number => {
+    // Invalidate cache if CSS zoom has changed
+    const currentZoom = document.documentElement.style.zoom || "";
+    if (_fixedPositionScale !== undefined && _fixedPositionScaleZoom === currentZoom) {
+        return _fixedPositionScale;
+    }
+    const testEl = document.createElement("div");
+    testEl.style.cssText = "position:fixed;top:100px;left:100px;width:1px;height:1px;visibility:hidden;pointer-events:none;z-index:-1";
+    document.body.appendChild(testEl);
+    const rect = testEl.getBoundingClientRect();
+    document.body.removeChild(testEl);
+    if (rect.top > 0) {
+        const scale = 100 / rect.top;
+        // Only apply correction if the mismatch is significant (> 1%)
+        _fixedPositionScale = Math.abs(scale - 1) > 0.01 ? scale : 1;
+    } else {
+        _fixedPositionScale = 1;
+    }
+    _fixedPositionScaleZoom = currentZoom;
+    return _fixedPositionScale;
+};
+
 export const isFileAnnotation = (text: string) => {
     return /^<<assets\/.+\/\d{14}-\w{7} ".+">>$/.test(text);
 };
