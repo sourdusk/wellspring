@@ -212,6 +212,9 @@ fn main() {
                         log::warn!("Saved window position ({}, {}) is off-screen, centering window", x, y);
                         let _ = window.center();
                     }
+                } else {
+                    // No saved position (first launch) — center the window
+                    let _ = window.center();
                 }
                 if ws.maximized {
                     let _ = window.maximize();
