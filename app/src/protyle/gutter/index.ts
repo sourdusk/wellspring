@@ -2679,7 +2679,13 @@ data-type="fold" style="cursor:inherit;"><svg style="width: 10px${fold && fold =
         this.element.innerHTML = html;
         this.element.classList.remove("fn__none");
         this.element.style.width = "";
-        const contentTop = protyle.contentElement.getBoundingClientRect().top;
+        // fpScale converts viewport coordinates (from getBoundingClientRect, which are
+        // scaled by CSS zoom) to CSS coordinates (for position:fixed assignment).
+        // It must be applied to each getBoundingClientRect() value BEFORE mixing with
+        // CSS-pixel values (clientWidth, clientHeight, space, fontSize, etc.) to avoid
+        // coordinate system mismatch that grows with zoom level.
+        const fpScale = getFixedPositionScale();
+        const contentTopCSS = protyle.contentElement.getBoundingClientRect().top * fpScale;
         let rect = element.getBoundingClientRect();
         let marginHeight = 0;
         if (listItem && !window.siyuan.config.editor.rtl && getComputedStyle(element).direction !== "rtl") {
@@ -2689,32 +2695,32 @@ data-type="fold" style="cursor:inherit;"><svg style="width: 10px${fold && fold =
             rect = nodeElement.getBoundingClientRect();
             space = 0;
         } else if (!element.classList.contains("av__row")) {
-            if (rect.height < Math.floor(window.siyuan.config.editor.fontSize * 1.625) + 8 ||
-                (rect.height > Math.floor(window.siyuan.config.editor.fontSize * 1.625) + 8 && rect.height < Math.floor(window.siyuan.config.editor.fontSize * 1.625) * 2 + 8)) {
-                marginHeight = (rect.height - this.element.clientHeight) / 2;
+            // Convert rect.height to CSS pixels for comparison with CSS-pixel thresholds
+            const cssHeight = rect.height * fpScale;
+            const lineHeight = Math.floor(window.siyuan.config.editor.fontSize * 1.625) + 8;
+            if (cssHeight < lineHeight ||
+                (cssHeight > lineHeight && cssHeight < Math.floor(window.siyuan.config.editor.fontSize * 1.625) * 2 + 8)) {
+                marginHeight = (cssHeight - this.element.clientHeight) / 2;
             } else if ((nodeElement.getAttribute("data-type") === "NodeAttributeView" || element.getAttribute("data-type") === "NodeAttributeView") &&
-                contentTop < rect.top) {
+                contentTopCSS < rect.top * fpScale) {
                 marginHeight = 8;
             }
         }
-        // WebView2 at non-100% DPI may scale position:fixed coordinates differently
-        // from getBoundingClientRect() values; apply correction factor
-        const fpScale = getFixedPositionScale();
-        const computedTop = Math.max(rect.top, contentTop) + marginHeight;
-        this.element.style.top = `${computedTop * fpScale}px`;
-        let left = rect.left - this.element.clientWidth - space;
+        const computedTop = Math.max(rect.top * fpScale, contentTopCSS) + marginHeight;
+        this.element.style.top = `${computedTop}px`;
+        let left = rect.left * fpScale - this.element.clientWidth - space;
         if ((nodeElement.getAttribute("data-type") === "NodeBlockQueryEmbed" && this.element.childElementCount === 1)) {
             // 嵌入块为列表时
-            left = nodeElement.getBoundingClientRect().left - this.element.clientWidth - space;
+            left = nodeElement.getBoundingClientRect().left * fpScale - this.element.clientWidth - space;
         } else if (element.classList.contains("av__row")) {
             // 为数据库行
-            left = nodeElement.getBoundingClientRect().left - this.element.clientWidth - space + parseInt(getComputedStyle(nodeElement).paddingLeft);
+            left = nodeElement.getBoundingClientRect().left * fpScale - this.element.clientWidth - space + parseInt(getComputedStyle(nodeElement).paddingLeft);
         }
-        this.element.style.left = `${left * fpScale}px`;
-        if (left < this.element.parentElement.getBoundingClientRect().left) {
+        this.element.style.left = `${left}px`;
+        if (left < this.element.parentElement.getBoundingClientRect().left * fpScale) {
             this.element.style.width = "24px";
             // 需加 2，否则和折叠标题无法对齐
-            this.element.style.left = `${(rect.left - this.element.clientWidth - space / 2 + 3) * fpScale}px`;
+            this.element.style.left = `${rect.left * fpScale - this.element.clientWidth - space / 2 + 3}px`;
             html = "";
             Array.from(this.element.children).reverse().forEach((item, index) => {
                 if (index !== 0) {
