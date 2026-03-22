@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="SiYuan" src="https://b3log.org/images/brand/siyuan-128.png">
+<img alt="Wellspring" src="app/stage/wellspring-logo.svg" width="128">
 <br>
 <em>Düşünceni Yeniden Şekillendir</em>
 <br><br>
@@ -48,9 +48,9 @@
 * [🏘️ Topluluk](#️-topluluk)
 * [🛠️ Geliştirme Rehberi](#️-geliştirme-rehberi)
 * [❓ SSS (Sıkça Sorulan Sorular)](#-sss-sıkça-sorulan-sorular)
-  * [SiYuan verileri nasıl saklar?](#siyuan-verileri-nasıl-saklar)
+  * [Wellspring verileri nasıl saklar?](#wellspring-verileri-nasıl-saklar)
   * [Üçüncü taraf senkronizasyon diskiyle veri senkronizasyonu destekleniyor mu?](#üçüncü-taraf-senkronizasyon-diskiyle-veri-senkronizasyonu-destekleniyor-mu)
-  * [SiYuan açık kaynak mı?](#siyuan-açık-kaynak-mı)
+  * [Wellspring açık kaynak mı?](#wellspring-açık-kaynak-mı)
   * [Yeni bir sürüme nasıl yükseltilir?](#yeni-bir-sürüme-nasıl-yükseltilir)
   * [Bazı bloklar (örneğin liste öğelerindeki paragraflar) blok simgesini bulamıyorsa ne yapmalıyım?](#bazı-bloklar-örneğin-liste-öğelerindeki-paragraflar-blok-simgesini-bulamıyorsa-ne-yapmalıyım)
   * [Veri deposu anahtarı (data repo key) kaybolursa ne yapmalıyım?](#veri-deposu-anahtarı-data-repo-key-kaybolursa-ne-yapmalıyım)
@@ -62,10 +62,10 @@
 
 ## 💡 Giriş
 
-SiYuan, gizliliği ön planda tutan kişisel bir bilgi yönetim sistemidir.  
+Wellspring, gizliliği ön planda tutan kişisel bir bilgi yönetim sistemidir.
 Blok düzeyinde referansları ve Markdown WYSIWYG düzenlemeyi destekler.
 
-Daha fazla bilgi için [SiYuan İngilizce Tartışma Forumu](https://liuyun.io)’na katılabilirsin.
+Daha fazla bilgi için [Wellspring İngilizce Tartışma Forumu](https://liuyun.io)’na katılabilirsin.
 
 ![feature0.png](https://b3logfile.com/file/2025/11/feature0-GfbhEqf.png)
 
@@ -111,7 +111,7 @@ Bazı özellikler yalnızca ücretli üyeler için geçerlidir. Detaylar için [
 
 ## 🏗️ Mimari ve Ekosistem
 
-![SiYuan Arch](https://b3logfile.com/file/2023/05/SiYuan_Arch-Sgu8vXT.png "SiYuan Arch")
+![Wellspring Arch](https://b3logfile.com/file/2023/05/SiYuan_Arch-Sgu8vXT.png "Wellspring Arch")
 
 | Proje                                                    | Açıklama              | Çatallama (Forks)                                                              | Yıldız (Stars)                                                                     |
 |----------------------------------------------------------|-----------------------|--------------------------------------------------------------------------------|------------------------------------------------------------------------------------|
@@ -137,8 +137,8 @@ Bazı özellikler yalnızca ücretli üyeler için geçerlidir. Detaylar için [
 
 ## 🗺️ Yol Haritası
 
-* [SiYuan geliştirme planı ve ilerleme durumu](https://github.com/orgs/siyuan-note/projects/1)
-* [SiYuan değişiklik günlüğü](CHANGELOG.md)
+* [Wellspring geliştirme planı ve ilerleme durumu](https://github.com/orgs/siyuan-note/projects/1)
+* [Wellspring değişiklik günlüğü](CHANGELOG.md)
 
 ## 🚀 İndirme ve Kurulum
 
@@ -178,7 +178,7 @@ Masaüstü:
 
 #### Genel Bakış
 
-SiYuan’ı bir sunucuda çalıştırmanın en kolay yolu Docker üzerinden dağıtmaktır.
+Wellspring’i bir sunucuda çalıştırmanın en kolay yolu Docker üzerinden dağıtmaktır.
 
 * Görüntü adı: `b3log/siyuan`
 * [Docker Görüntüsü](https://hub.docker.com/r/b3log/siyuan)
@@ -236,7 +236,7 @@ docker run -d \
 
 #### Docker Compose
 
-SiYuan’ı Docker Compose ile çalıştıran kullanıcılar için, `PUID` ve `PGID` ortam değişkenleri kullanılarak kullanıcı ve grup kimlikleri özelleştirilebilir. Aşağıda örnek bir Docker Compose yapılandırması bulunmaktadır:
+Wellspring’i Docker Compose ile çalıştıran kullanıcılar için, `PUID` ve `PGID` ortam değişkenleri kullanılarak kullanıcı ve grup kimlikleri özelleştirilebilir. Aşağıda örnek bir Docker Compose yapılandırması bulunmaktadır:
 
 ```yaml
 version: "3.9"
@@ -358,7 +358,7 @@ Büyük güncellemelerden önce erken erişim (Insider Preview) sürümlerini ya
 
 * [İngilizce Tartışma Forumu](https://liuyun.io)
 * [Kullanıcı topluluğu özeti](https://liuyun.io/article/1687779743723)
-* [Harika SiYuan (Awesome SiYuan)](https://github.com/siyuan-note/awesome)
+* [Harika Wellspring (Awesome Wellspring)](https://github.com/siyuan-note/awesome)
 
 ## 🛠️ Geliştirme Rehberi
 
@@ -366,7 +366,7 @@ Büyük güncellemelerden önce erken erişim (Insider Preview) sürümlerini ya
 
 ## ❓ SSS (Sıkça Sorulan Sorular)
 
-### SiYuan verileri nasıl saklar?
+### Wellspring verileri nasıl saklar?
 
 Veriler, çalışma alanı klasöründeki `data` klasöründe saklanır:
 
@@ -391,9 +391,9 @@ Alternatif olarak, verileri **elle dışa aktarıp içe aktararak** senkronizasy
 * Masaüstü: <kbd>Ayarlar</kbd> → <kbd>Dışa Aktar</kbd> → <kbd>Verileri Dışa Aktar / Verileri İçe Aktar</kbd>  
 * Mobil: <kbd>Sağ panel</kbd> → <kbd>Hakkında</kbd> → <kbd>Verileri Dışa Aktar / Verileri İçe Aktar</kbd>
 
-### SiYuan açık kaynak mı?
+### Wellspring açık kaynak mı?
 
-Evet, SiYuan tamamen açık kaynaklıdır ve katkılara açıktır:
+Evet, Wellspring tamamen açık kaynaklıdır ve katkılara açıktır:
 
 * [Kullanıcı Arayüzü ve Çekirdek](https://github.com/siyuan-note/siyuan)  
 * [Android](https://github.com/siyuan-note/siyuan-android)  
@@ -406,7 +406,7 @@ Daha fazla bilgi için [Geliştirme Rehberi](https://github.com/siyuan-note/siyu
 ### Yeni bir sürüme nasıl yükseltilir?
 
 * Uygulama mağazası üzerinden kurduysanız, güncellemeyi yine uygulama mağazası üzerinden yapın.  
-* Masaüstü kurulum paketiyle yüklediyseniz, <kbd>Ayarlar</kbd> → <kbd>Hakkında</kbd> → <kbd>Güncelleme kurulum paketini otomatik indir</kbd> seçeneğini etkinleştirin. Böylece SiYuan, en son sürüm kurulum paketini otomatik indirip yükleme uyarısı gösterecektir.  
+* Masaüstü kurulum paketiyle yüklediyseniz, <kbd>Ayarlar</kbd> → <kbd>Hakkında</kbd> → <kbd>Güncelleme kurulum paketini otomatik indir</kbd> seçeneğini etkinleştirin. Böylece Wellspring, en son sürüm kurulum paketini otomatik indirip yükleme uyarısı gösterecektir.  
 * Manuel yükleme yaptıysanız, en son kurulum paketini indirip yeniden yüklemeniz gerekir.
 
 Ayrıca, <kbd>Ayarlar</kbd> → <kbd>Hakkında</kbd> → <kbd>Geçerli Sürüm</kbd> sekmesinden <kbd>Güncellemeyi kontrol et</kbd> seçeneğini kullanabilir veya [Resmî İndirme Sayfası](https://b3log.org/siyuan/en/download.html) ya da [GitHub Sürümleri](https://github.com/siyuan-note/siyuan/releases) sayfalarını takip edebilirsiniz.
@@ -435,13 +435,13 @@ Ancak üyelik ayrıcalıkları yalnızca ödeme sonrasında kullanılabilir. Det
 
 ## 🙏 Teşekkür
 
-SiYuan’ın doğuşu, birçok açık kaynak projesi ve katkıcısının emeğiyle mümkün olmuştur. Daha fazla bilgi için proje kaynak kodlarındaki `kernel/go.mod`, `app/package.json` ve proje anasayfasına bakabilirsiniz.
+Wellspring’in doğuşu, birçok açık kaynak projesi ve katkıcısının emeğiyle mümkün olmuştur. Daha fazla bilgi için proje kaynak kodlarındaki `kernel/go.mod`, `app/package.json` ve proje anasayfasına bakabilirsiniz.
 
-SiYuan’ın gelişimi, kullanıcı geri bildirimleri ve desteğiyle büyümeye devam ediyor. SiYuan’a katkı sağlayan herkese teşekkürler ❤️
+Wellspring’in gelişimi, kullanıcı geri bildirimleri ve desteğiyle büyümeye devam ediyor. Wellspring’e katkı sağlayan herkese teşekkürler ❤️
 
 ### Katkıda Bulunanlar
 
-Bize katıl ve SiYuan’a birlikte katkı yap! 💪  
+Bize katıl ve Wellspring’e birlikte katkı yap!
 
 <a href="https://github.com/siyuan-note/siyuan/graphs/contributors">
    <img src="https://contrib.rocks/image?repo=siyuan-note/siyuan" />

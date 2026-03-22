@@ -115,7 +115,7 @@
         },
         {
           "id": "20210808180117-czj9bvb",
-          "name": "SiYuanユーザーガイド",
+          "name": "Wellspringユーザーガイド",
           "icon": "1f4d4",
           "sort": 1,
           "closed": false
@@ -1117,7 +1117,7 @@
   ```json
   {
     "id": "20220724223548-j6g0o87",
-    "path": "F:\\SiYuan\\data\\templates\\foo.md"
+    "path": "F:\\Wellspring\\data\\templates\\foo.md"
   }
   ```
 
@@ -1131,7 +1131,7 @@
     "msg": "",
     "data": {
       "content": "<div data-node-id=\"20220729234848-dlgsah7\" data-node-index=\"1\" data-type=\"NodeParagraph\" class=\"p\" updated=\"20220729234840\"><div contenteditable=\"true\" spellcheck=\"false\">foo</div><div class=\"protyle-attr\" contenteditable=\"false\">​</div></div>",
-      "path": "F:\\SiYuan\\data\\templates\\foo.md"
+      "path": "F:\\Wellspring\\data\\templates\\foo.md"
     }
   }
   ```
@@ -1310,7 +1310,7 @@
     "msg": "",
     "data": {
       "hPath": "/Please Start Here",
-      "content": "## 🍫 Content Block\n\nIn SiYuan, the only important core concept is..."
+      "content": "## 🍫 Content Block\n\nIn Wellspring, the only important core concept is..."
     }
   }
   ```

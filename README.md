@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="SiYuan" src="https://b3log.org/images/brand/siyuan-128.png">
+<img alt="Wellspring" src="app/stage/wellspring-logo.svg" width="128">
 <br>
 <em>Refactor your thinking</em>
 <br><br>
@@ -48,9 +48,9 @@
 * [🏘️ Community](#️-community)
 * [🛠️ Development Guide](#️-development-guide)
 * [❓ FAQ](#-faq)
-  * [How does SiYuan store data?](#how-does-siyuan-store-data)
+  * [How does Wellspring store data?](#how-does-wellspring-store-data)
   * [Does it support data synchronization through a third-party sync disk?](#does-it-support-data-synchronization-through-a-third-party-sync-disk)
-  * [Is SiYuan open source?](#is-siyuan-open-source)
+  * [Is Wellspring open source?](#is-wellspring-open-source)
   * [How to upgrade to a new version?](#how-to-upgrade-to-a-new-version)
   * [What if some blocks (such as paragraph blocks in list items) cannot find the block icon?](#what-if-some-blocks-such-as-paragraph-blocks-in-list-items-cannot-find-the-block-icon)
   * [What should I do if the data repo key is lost?](#what-should-i-do-if-the-data-repo-key-is-lost)
@@ -62,10 +62,10 @@
 
 ## 💡 Introduction
 
-SiYuan is a privacy-first personal knowledge management system, support fine-grained block-level reference and Markdown
+Wellspring is a privacy-first personal knowledge management system, support fine-grained block-level reference and Markdown
 WYSIWYG.
 
-Welcome to [SiYuan English Discussion Forum](https://liuyun.io) to learn more.
+Welcome to [Wellspring English Discussion Forum](https://liuyun.io) to learn more.
 
 ![feature0.png](https://b3logfile.com/file/2025/11/feature0-GfbhEqf.png)
 
@@ -111,7 +111,7 @@ Some features are only available to paid members, for more details please refer 
 
 ## 🏗️ Architecture and Ecosystem
 
-![SiYuan Arch](https://b3logfile.com/file/2023/05/SiYuan_Arch-Sgu8vXT.png "SiYuan Arch")
+![Wellspring Arch](https://b3logfile.com/file/2023/05/SiYuan_Arch-Sgu8vXT.png "Wellspring Arch")
 
 | Project                                                  | Description           | Forks                                                                           | Stars                                                                                | 
 |----------------------------------------------------------|-----------------------|---------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
@@ -137,8 +137,8 @@ Some features are only available to paid members, for more details please refer 
 
 ## 🗺️ Roadmap
 
-* [SiYuan development plan and progress](https://github.com/orgs/siyuan-note/projects/1)
-* [SiYuan changelog](CHANGELOG.md)
+* [Wellspring development plan and progress](https://github.com/orgs/siyuan-note/projects/1)
+* [Wellspring changelog](CHANGELOG.md)
 
 ## 🚀 Download Setup
 
@@ -178,7 +178,7 @@ Desktop:
 
 #### Overview
 
-The easiest way to serve SiYuan on a server is to deploy it through Docker.
+The easiest way to serve Wellspring on a server is to deploy it through Docker.
 
 * Image name `b3log/siyuan`
 * [Image URL](https://hub.docker.com/r/b3log/siyuan)
@@ -358,7 +358,7 @@ We release insider preview before major updates, please visit [https://github.co
 
 * [English Discussion Forum](https://liuyun.io)
 * [User community summary](https://liuyun.io/article/1687779743723)
-* [Awesome SiYuan](https://github.com/siyuan-note/awesome)
+* [Awesome Wellspring](https://github.com/siyuan-note/awesome)
 
 ## 🛠️ Development Guide
 
@@ -366,7 +366,7 @@ See [Development Guide](https://github.com/siyuan-note/siyuan/blob/master/.githu
 
 ## ❓ FAQ
 
-### How does SiYuan store data?
+### How does Wellspring store data?
 
 The data is saved in the workspace folder, in the workspace data folder:
 
@@ -391,9 +391,9 @@ In addition, you can also consider manually exporting and importing data to achi
 * Desktop: <kbd>Settings</kbd> - <kbd>Export</kbd> - <kbd>Export Data</kbd> / <kbd>Import Data</kbd>
 * Mobile: <kbd>Right column</kbd> - <kbd>About</kbd> - <kbd>Export Data</kbd> / <kbd>Import Data</kbd>
 
-### Is SiYuan open source?
+### Is Wellspring open source?
 
-SiYuan is completely open source, and contributions are welcome:
+Wellspring is completely open source, and contributions are welcome:
 
 * [User Interface and Kernel](https://github.com/siyuan-note/siyuan)
 * [Android](https://github.com/siyuan-note/siyuan-android)
@@ -406,7 +406,7 @@ For more details, please refer to [Development Guide](https://github.com/siyuan-
 ### How to upgrade to a new version?
 
 * If installed via app store, please update via app store
-* If it is installed through the installation package on the desktop, you can open the option of <kbd>Settings</kbd> - <kbd>About</kbd> - <kbd>Automatically download update installation package</kbd>, so that SiYuan will automatically download The latest version of the installation package and prompts to install
+* If it is installed through the installation package on the desktop, you can open the option of <kbd>Settings</kbd> - <kbd>About</kbd> - <kbd>Automatically download update installation package</kbd>, so that Wellspring will automatically download The latest version of the installation package and prompts to install
 * If it is installed by manual installation package, please download the installation package again to install
 
 You can <kbd>Check update</kbd> in <kbd>Settings</kbd> - <kbd>About</kbd> - <kbd>Current Version</kbd>, or pay attention to [Official Download](https://b3log.org/siyuan/en/download.html) or [GitHub Releases](https://github.com/siyuan-note/siyuan/releases) to get the new version.
@@ -434,13 +434,13 @@ Member's privileges can only be used after payment, please refer to [Pricing](ht
 
 ## 🙏 Acknowledgement
 
-The birth of SiYuan is inseparable from many open source projects and contributors, please refer to the project source code kernel/go.mod, app/package.json and project homepage.
+The birth of Wellspring is inseparable from many open source projects and contributors, please refer to the project source code kernel/go.mod, app/package.json and project homepage.
 
-The growth of SiYuan is inseparable from user feedback and promotion, thank you for everyone's help to SiYuan ❤️
+The growth of Wellspring is inseparable from user feedback and promotion, thank you for everyone's help to Wellspring ❤️
 
 ### Contributors
 
-Welcome to join us and contribute code to SiYuan together.
+Welcome to join us and contribute code to Wellspring together.
 
 <a href="https://github.com/siyuan-note/siyuan/graphs/contributors">
    <img src="https://contrib.rocks/image?repo=siyuan-note/siyuan" />

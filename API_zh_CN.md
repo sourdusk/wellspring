@@ -115,7 +115,7 @@
         },
         {
           "id": "20210808180117-czj9bvb",
-          "name": "思源笔记用户指南",
+          "name": "Wellspring 用户指南",
           "icon": "1f4d4",
           "sort": 1,
           "closed": false
@@ -1117,7 +1117,7 @@
   ```json
   {
     "id": "20220724223548-j6g0o87",
-    "path": "F:\\SiYuan\\data\\templates\\foo.md"
+    "path": "F:\\Wellspring\\data\\templates\\foo.md"
   }
   ```
     * `id`：调用渲染所在的文档 ID
@@ -1130,7 +1130,7 @@
     "msg": "",
     "data": {
       "content": "<div data-node-id=\"20220729234848-dlgsah7\" data-node-index=\"1\" data-type=\"NodeParagraph\" class=\"p\" updated=\"20220729234840\"><div contenteditable=\"true\" spellcheck=\"false\">foo</div><div class=\"protyle-attr\" contenteditable=\"false\">​</div></div>",
-      "path": "F:\\SiYuan\\data\\templates\\foo.md"
+      "path": "F:\\Wellspring\\data\\templates\\foo.md"
     }
   }
   ```
@@ -1310,7 +1310,7 @@
     "msg": "",
     "data": {
       "hPath": "/0 请从这里开始",
-      "content": "## 🍫 内容块\n\n在思源中，唯一重要的核心概念是..."
+      "content": "## 🍫 内容块\n\n在 Wellspring 中，唯一重要的核心概念是..."
     }
   }
   ```

@@ -41,11 +41,11 @@ Note: In the development environment, the kernel process will not be automatical
 ### Desktop
 
 * `cd kernel`
-* Windows: `go build --tags "fts5" -o "../app/kernel/SiYuan-Kernel.exe"`
-* Linux/macOS: `go build --tags "fts5" -o "../app/kernel/SiYuan-Kernel"`
+* Windows: `go build --tags "fts5" -o "../app/kernel/Wellspring-Kernel.exe"`
+* Linux/macOS: `go build --tags "fts5" -o "../app/kernel/Wellspring-Kernel"`
 * `cd ../app/kernel`
-* Windows: `./SiYuan-Kernel.exe --wd=.. --mode=dev`
-* Linux/macOS: `./SiYuan-Kernel --wd=.. --mode=dev`
+* Windows: `./Wellspring-Kernel.exe --wd=.. --mode=dev`
+* Linux/macOS: `./Wellspring-Kernel --wd=.. --mode=dev`
 
 ### iOS
 

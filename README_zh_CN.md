@@ -1,5 +1,5 @@
 <p align="center">
-<img alt="SiYuan" src="https://b3log.org/images/brand/siyuan-128.png">
+<img alt="Wellspring" src="app/stage/wellspring-logo.svg" width="128">
 <br>
 <em>重构你的思维</em>
 <br><br>
@@ -51,9 +51,9 @@
 * [🏘️ 社区](#️-社区)
 * [🛠️ 开发指南](#️-开发指南)
 * [❓ 常见问题和解答](#-常见问题和解答)
-  * [思源是如何存储数据的？](#思源是如何存储数据的)
+  * [Wellspring 是如何存储数据的？](#wellspring-是如何存储数据的)
   * [支持通过第三方同步盘进行数据同步吗？](#支持通过第三方同步盘进行数据同步吗)
-  * [思源是开源的吗？](#思源是开源的吗)
+  * [Wellspring 是开源的吗？](#wellspring-是开源的吗)
   * [如何升级到新版本？](#如何升级到新版本)
   * [有的块（比如在列表项中的段落块）找不到块标怎么办？](#有的块比如在列表项中的段落块找不到块标怎么办)
   * [数据仓库密钥遗失怎么办？](#数据仓库密钥遗失怎么办)
@@ -65,13 +65,13 @@
 
 ## 💡 简介
 
-思源笔记是一款隐私优先的个人知识管理系统，支持细粒度块级引用和 Markdown 所见即所得。
+Wellspring 是一款隐私优先的个人知识管理系统，支持细粒度块级引用和 Markdown 所见即所得。
 
 ![feature0.png](https://b3logfile.com/file/2025/11/feature0-GfbhEqf.png)
 
 ![feature51.png](https://b3logfile.com/file/2025/11/feature5-1-7DJSfEP.png)
 
-欢迎到[思源笔记官方讨论区](https://ld246.com/domain/siyuan)了解更多。同时也欢迎关注 B3log 开源社区微信公众号 `B3log开源`：
+欢迎到[Wellspring 官方讨论区](https://ld246.com/domain/siyuan)了解更多。同时也欢迎关注 B3log 开源社区微信公众号 `B3log开源`：
 
 ![b3logos.jpg](https://b3logfile.com/file/2020/08/b3logos-032af045.jpg)
 
@@ -114,7 +114,7 @@
 
 ## 🏗️ 架构和生态
 
-![思源笔记架构设计](https://b3logfile.com/file/2023/05/SiYuan_Arch-Sgu8vXT.png "思源笔记架构设计")
+![Wellspring 架构设计](https://b3logfile.com/file/2023/05/SiYuan_Arch-Sgu8vXT.png "Wellspring 架构设计")
 
 | Project                                                  | Description  | Forks                                                                           | Stars                                                                                | 
 |----------------------------------------------------------|--------------|---------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
@@ -140,8 +140,8 @@
 
 ## 🗺️ 路线图
 
-* [思源笔记开发计划和进度](https://github.com/orgs/siyuan-note/projects/1)
-* [思源笔记版本变更和公告](CHANGELOG.md)
+* [Wellspring 开发计划和进度](https://github.com/orgs/siyuan-note/projects/1)
+* [Wellspring 版本变更和公告](CHANGELOG.md)
 
 ## 🚀 下载安装
 
@@ -184,7 +184,7 @@
 
 #### 概述
 
-在服务器上伺服思源最简单的方案是通过 Docker 部署。
+在服务器上伺服 Wellspring 最简单的方案是通过 Docker 部署。
 
 * 镜像名称 `b3log/siyuan`
 * [镜像地址](https://hub.docker.com/r/b3log/siyuan)
@@ -242,7 +242,7 @@ docker run -d \
 
 #### Docker Compose
 
-对于使用 Docker Compose 运行思源的用户，可以通过环境变量 `PUID` 和 `PGID` 来自定义用户和组的 ID。下面是一个 Docker Compose 配置示例：
+对于使用 Docker Compose 运行 Wellspring 的用户，可以通过环境变量 `PUID` 和 `PGID` 来自定义用户和组的 ID。下面是一个 Docker Compose 配置示例：
 
 ```yaml
 version: "3.9"
@@ -369,7 +369,7 @@ services:
 
 1. 登录宝塔面板，在左侧菜单栏中点击 `Docker`
 2. 首次会提示安装 `Docker` 和 `Docker Compose` 服务，点击立即安装，若已安装请忽略
-3. 安装完成后在 `Docker-应用商店-实用工具` 中找到 `思源笔记`，点击`安装`，也可以在搜索框直接搜索
+3. 安装完成后在 `Docker-应用商店-实用工具` 中找到 `Wellspring`，点击`安装`，也可以在搜索框直接搜索
 4. 设置域名等基本信息，点击 `确定`
    * 名称：应用名称，默认 `siyuan_随机字符`
    * 版本选择：默认 `latest`
@@ -380,7 +380,7 @@ services:
    * 内存限制：0为不限制，根据实际需要设置
 5. 提交后面板会自动进行应用初始化，大概需要`1-3`分钟，初始化完成后即可访问
 
-#### 访问思源笔记
+#### 访问 Wellspring
 
 * 如果你填写了域名，请在浏览器输入域名访问
 * 如你选择了 `IP+端口`，请在浏览器地输入 `http://<宝塔面板IP>:6806` 访问
@@ -401,10 +401,10 @@ services:
 1. 登录小皮面板后，点击左侧菜单的 **Docker**
 2. 首次打开会提示安装 Docker，点击 **点击安装 Docker**
 3. 按照提示安装 Docker
-4. 点击 **应用商店**，找到 **思源笔记**，点击 **安装** -> **立即安装**
+4. 点击 **应用商店**，找到 **Wellspring**，点击 **安装** -> **立即安装**
 5. 等待安装结束后，可在 **任务队列** 界面的 **已结束** 中点击 **详情** 查看安装信息
 
-#### 访问思源笔记
+#### 访问 Wellspring
 
 * 在浏览器输入 `http://<小皮面板机器IP>:6806` 访问
 
@@ -423,7 +423,7 @@ services:
 #### 部署
 
 1. 登录1Panel面板，在左侧菜单栏中点击 `应用商店`
-2. 在 `应用商店-实用工具` 中找到 `思源笔记`，点击`安装`，也可以在搜索框直接搜索
+2. 在 `应用商店-实用工具` 中找到 `Wellspring`，点击`安装`，也可以在搜索框直接搜索
 3. 配置访问授权码等基本信息，点击 `确定`
 
     - 名称：应用名称，默认 `siyuan`
@@ -439,7 +439,7 @@ services:
 7. 在`主域名`填入你的域名，网站代号会自动生成，代理选择`http`，代理地址填写`127.0.0.1:6806`，点击`确定`
 8. (可选) 配置你创建的网站，可根据需要配置`https`访问增强访问安全性
 
-#### 访问思源笔记
+#### 访问 Wellspring
 
 - 如果你通过`OpenResty`反向代理反代了网站，并且填写了域名，请在浏览器输入`域名`访问
 - 如你选择了 `端口外部访问`，请在浏览器地输入 `http://<1Panel面板IP>:6806` 访问
@@ -454,7 +454,7 @@ services:
 
 * [中文讨论区](https://ld246.com/domain/siyuan)
 * [用户社区汇总](https://ld246.com/article/1640266171309)
-* [Awesome SiYuan](https://github.com/siyuan-note/awesome)
+* [Awesome Wellspring](https://github.com/siyuan-note/awesome)
 
 ## 🛠️ 开发指南
 
@@ -462,7 +462,7 @@ services:
 
 ## ❓ 常见问题和解答
 
-### 思源是如何存储数据的？
+### Wellspring 是如何存储数据的？
 
 数据保存在工作空间文件夹下，在工作空间 data 文件夹下：
 
@@ -487,9 +487,9 @@ services:
 * 桌面端：<kbd>设置</kbd> - <kbd>导出</kbd> - <kbd>导出 Data</kbd> / <kbd>导入 Data</kbd>
 * 移动端：<kbd>右侧栏</kbd> - <kbd>关于</kbd> - <kbd>导出 Data</kbd> / <kbd>导入 Data</kbd>
 
-### 思源是开源的吗？
+### Wellspring 是开源的吗？
 
-思源笔记是完全开源的，欢迎参与贡献：
+Wellspring 是完全开源的，欢迎参与贡献：
 
 * [界面和内核](https://github.com/siyuan-note/siyuan)
 * [Android 端](https://github.com/siyuan-note/siyuan-android)
@@ -502,7 +502,7 @@ services:
 ### 如何升级到新版本？
 
 * 如果是通过应用商店安装的，请通过应用商店更新
-* 如果是桌面端通过安装包安装的，可打开 <kbd>设置</kbd> - <kbd>关于</kbd> - <kbd>自动下载更新安装包</kbd> 选项，这样思源会自动下载最新版安装包并提示安装
+* 如果是桌面端通过安装包安装的，可打开 <kbd>设置</kbd> - <kbd>关于</kbd> - <kbd>自动下载更新安装包</kbd> 选项，这样 Wellspring 会自动下载最新版安装包并提示安装
 * 如果是通过手动安装包安装的，请再次下载安装包安装
 
 可在 <kbd>设置</kbd> - <kbd>关于</kbd> - <kbd>当前版本</kbd> 中 <kbd>检查更新</kbd>，也可以通过关注[官方下载](https://b3log.org/siyuan/download.html)或者 [GitHub Releases](https://github.com/siyuan-note/siyuan/releases) 来获取新版本。
@@ -534,13 +534,13 @@ services:
 
 ## 🙏 鸣谢
 
-思源的诞生离不开众多的开源项目和贡献者，请参考项目源代码 kernel/go.mod、app/package.json 和项目首页。
+Wellspring 的诞生离不开众多的开源项目和贡献者，请参考项目源代码 kernel/go.mod、app/package.json 和项目首页。
 
-思源的成长离不开用户的反馈和宣传推广，感谢所有人对思源的帮助 ❤️
+Wellspring 的成长离不开用户的反馈和宣传推广，感谢所有人对 Wellspring 的帮助 ❤️
 
 ### 贡献者列表
 
-欢迎加入我们，一起为思源贡献代码。
+欢迎加入我们，一起为 Wellspring 贡献代码。
 
 <a href="https://github.com/siyuan-note/siyuan/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=siyuan-note/siyuan" />
