@@ -333,13 +333,13 @@ fn main() {
                     log::error!("{}", e);
                 }
 
-                // Redirect main window to kernel-served page
+                // Navigate to the kernel-served page, then show after a short
+                // delay to let the page render. The frontend also calls show()
+                // via wellspring-ready-to-show, but this is a fallback.
                 if let Some(window) = app_handle2.get_webview_window("main") {
                     let url = format!("http://127.0.0.1:{}/stage/build/tauri/", port);
                     let _ = window.navigate(url.parse().unwrap());
-                    // Give the page a moment to load, then show the window
-                    // The frontend also calls show() via bridge, but this is a fallback
-                    tokio::time::sleep(std::time::Duration::from_secs(2)).await;
+                    tokio::time::sleep(std::time::Duration::from_secs(1)).await;
                     let _ = window.show();
                     let _ = window.set_focus();
                 }

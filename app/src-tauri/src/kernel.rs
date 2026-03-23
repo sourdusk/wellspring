@@ -91,18 +91,18 @@ pub async fn wait_for_kernel(port: u16) -> Result<(), String> {
     let client = reqwest::Client::new();
     let url = format!("http://127.0.0.1:{}/api/system/version", port);
 
-    for attempt in 0..15 {
+    for attempt in 0..100 {
         match client.get(&url).send().await {
             Ok(resp) if resp.status().is_success() => {
-                log::info!("Kernel responded on attempt {}", attempt + 1);
+                log::info!("Kernel responded on attempt {} ({}ms)", attempt + 1, (attempt + 1) * 100);
                 return Ok(());
             }
             _ => {
-                tokio::time::sleep(Duration::from_millis(500)).await;
+                tokio::time::sleep(Duration::from_millis(100)).await;
             }
         }
     }
-    Err("Kernel failed to start within 7.5 seconds".to_string())
+    Err("Kernel failed to start within 10 seconds".to_string())
 }
 
 pub async fn wait_for_boot(port: u16) -> Result<(), String> {
