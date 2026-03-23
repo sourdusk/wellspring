@@ -153,9 +153,6 @@ func indexBox(boxID string) {
 	util.PushStatusBar(fmt.Sprintf("["+html.EscapeString(box.Name)+"] "+Conf.Language(64), len(files)))
 
 	poolSize := runtime.NumCPU()
-	if 4 < poolSize {
-		poolSize = 4
-	}
 	waitGroup := &sync.WaitGroup{}
 	var avNodes []*ast.Node
 	p, _ := ants.NewPoolWithFunc(poolSize, func(arg interface{}) {

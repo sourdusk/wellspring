@@ -234,12 +234,8 @@ func Serve(fastMode bool, cookieKey string) {
 
 	go util.HookUILoaded()
 
-	go func() {
-		time.Sleep(1 * time.Second)
-		go proxy.InitFixedPortService(host, useTLS, certPath, keyPath)
-		go proxy.InitPublishService()
-		// 反代服务器启动失败不影响核心服务器启动
-	}()
+	go proxy.InitFixedPortService(host, useTLS, certPath, keyPath)
+	go proxy.InitPublishService()
 
 	util.HttpServer = &http.Server{
 		Handler: ginServer,
