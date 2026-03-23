@@ -12,9 +12,9 @@
             50% { opacity: 1; }
             100% { opacity: 0.3; }
         }
-        @keyframes loading-bar {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        @keyframes loading-spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
         .loading-wrapper {
             position: absolute;
@@ -25,20 +25,12 @@
             z-index: 1;
         }
         .loading-throbber {
-            width: 200px;
-            height: 3px;
-            background: rgba(106, 155, 235, 0.15);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-        .loading-throbber::after {
-            content: '';
-            display: block;
-            width: 50%;
-            height: 100%;
-            background: #6a9beb;
-            border-radius: 3px;
-            animation: loading-bar 1.4s ease-in-out infinite;
+            width: 28px;
+            height: 28px;
+            border: 3px solid rgba(106, 155, 235, 0.15);
+            border-top-color: #6a9beb;
+            border-radius: 50%;
+            animation: loading-spin 0.9s linear infinite;
         }
         .loading-logo {
             width: 36vh;

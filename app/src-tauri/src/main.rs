@@ -102,9 +102,38 @@ async fn get_clipboard_read(data: serde_json::Value) -> Result<String, String> {
 
     match format {
         "text" | "text/plain" => clipboard.get_text().map_err(|e| e.to_string()),
-        "text/html" => clipboard.get_text().map_err(|e| e.to_string()),
+        // arboard 3.x only supports reading text; HTML clipboard read is handled
+        // by navigator.clipboard.read() in the frontend (works in WebView2/Chromium)
+        "text/html" => clipboard.get_text().or_else(|_| Ok(String::new())),
         _ => Ok(String::new()),
     }
+}
+
+#[tauri::command]
+async fn get_clipboard_read_image() -> Result<String, String> {
+    let mut clipboard = arboard::Clipboard::new().map_err(|e| e.to_string())?;
+
+    let img_data = match clipboard.get_image() {
+        Ok(data) => data,
+        Err(_) => return Ok(String::new()), // No image in clipboard
+    };
+
+    // Convert RGBA bytes to PNG
+    let rgba_buf: image::RgbaImage = image::ImageBuffer::from_raw(
+        img_data.width as u32,
+        img_data.height as u32,
+        img_data.bytes.into_owned(),
+    ).ok_or("Failed to create image buffer")?;
+
+    let mut png_bytes: Vec<u8> = Vec::new();
+    let mut cursor = std::io::Cursor::new(&mut png_bytes);
+    rgba_buf.write_to(&mut cursor, image::ImageFormat::Png)
+        .map_err(|e| e.to_string())?;
+
+    // Return as data URI
+    use base64::Engine;
+    let b64 = base64::engine::general_purpose::STANDARD.encode(&png_bytes);
+    Ok(format!("data:image/png;base64,{}", b64))
 }
 
 fn main() {
@@ -137,6 +166,7 @@ fn main() {
             open_workspace,
             send_to_windows,
             get_clipboard_read,
+            get_clipboard_read_image,
             commands::window::cmd_show,
             commands::window::cmd_hide,
             commands::window::cmd_minimize,

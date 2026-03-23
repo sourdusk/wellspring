@@ -5708,8 +5708,10 @@ name = "wellspring"
 version = "4.0.0"
 dependencies = [
  "arboard",
+ "base64 0.22.1",
  "dirs 5.0.1",
  "env_logger",
+ "image",
  "log",
  "portpicker",
  "reqwest 0.12.28",

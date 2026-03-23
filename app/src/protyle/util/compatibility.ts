@@ -191,6 +191,51 @@ export const readClipboard = async () => {
         }
         return text;
     }
+    /// #if TAURI
+    // Hybrid approach: web API for HTML/text, Rust backend for images (more reliable)
+    try {
+        const clipboardContents = await navigator.clipboard.read();
+        if (clipboardContents) {
+            for (const item of clipboardContents) {
+                if (item.types.includes("text/html")) {
+                    const blob = await item.getType("text/html");
+                    text.textHTML = await blob.text();
+                    const textObj = getTextSiyuanFromTextHTML(text.textHTML);
+                    text.textHTML = textObj.textHtml;
+                    text.siyuanHTML = textObj.textSiyuan;
+                }
+                if (item.types.includes("text/plain")) {
+                    const blob = await item.getType("text/plain");
+                    text.textPlain = await blob.text();
+                }
+            }
+        }
+    } catch (e) {
+        // Web API failed — fall back to Rust for plain text
+        const plainResult = await invokeHandler(Constants.SIYUAN_GET, {
+            cmd: "clipboardRead",
+            format: "text/plain",
+        });
+        if (plainResult) {
+            text.textPlain = plainResult;
+        }
+    }
+    // Image clipboard: always use Rust backend (more reliable than web API for images)
+    if (!text.textHTML && !text.files) {
+        const imageData = await invokeHandler(Constants.SIYUAN_GET, {
+            cmd: "clipboardReadImage",
+        });
+        if (imageData) {
+            const response = await fetch(imageData);
+            const blob = await response.blob();
+            text.files = [new File([blob], "image.png", {type: "image/png", lastModified: Date.now()})];
+        }
+    }
+    if (!text.textHTML && !text.files) {
+        text.localFiles = await getLocalFiles();
+    }
+    return text;
+    /// #endif
     if (typeof navigator.clipboard === "undefined") {
         alert(window.siyuan.languages.clipboardPermissionDenied);
         return text;
