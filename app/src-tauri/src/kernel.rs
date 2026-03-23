@@ -7,6 +7,7 @@ pub struct KernelState {
     pub port: u16,
     pub child: Option<CommandChild>,
     pub workspace_dir: String,
+    pub setup_complete: bool,
 }
 
 impl Default for KernelState {
@@ -15,6 +16,7 @@ impl Default for KernelState {
             port: 0,
             child: None,
             workspace_dir: String::new(),
+            setup_complete: false,
         }
     }
 }

@@ -314,6 +314,12 @@ fn main() {
                     let _ = window.set_focus();
                 }
 
+                // Mark setup complete so Resized/Moved events start saving state
+                {
+                    let state = app_handle2.state::<Mutex<kernel::KernelState>>();
+                    state.lock().unwrap().setup_complete = true;
+                }
+
                 let _ = app_handle2.emit("kernel-ready", port);
             });
 
@@ -333,6 +339,10 @@ fn main() {
                 tauri::WindowEvent::Resized(size) => {
                     // size is PhysicalSize — convert to logical for save/restore consistency
                     if window.label() == "main" {
+                        // Skip saving during setup to avoid races with window state restoration
+                        if let Some(state) = window.try_state::<Mutex<kernel::KernelState>>() {
+                            if !state.lock().unwrap().setup_complete { return; }
+                        }
                         let scale = window.scale_factor().unwrap_or(1.0);
                         let ws = window_state::WindowState {
                             width: size.width as f64 / scale,
@@ -348,6 +358,10 @@ fn main() {
                 tauri::WindowEvent::Moved(position) => {
                     // position is PhysicalPosition — convert to logical for save/restore consistency
                     if window.label() == "main" {
+                        // Skip saving during setup to avoid races with window state restoration
+                        if let Some(state) = window.try_state::<Mutex<kernel::KernelState>>() {
+                            if !state.lock().unwrap().setup_complete { return; }
+                        }
                         let scale = window.scale_factor().unwrap_or(1.0);
                         if let Ok(size) = window.inner_size() {
                             let ws = window_state::WindowState {

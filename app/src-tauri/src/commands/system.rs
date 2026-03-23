@@ -21,6 +21,20 @@ pub async fn cmd_notification(
 #[tauri::command]
 pub async fn cmd_open_path(app: AppHandle, data: serde_json::Value) -> Result<(), String> {
     let path = data.get("filePath").and_then(|v| v.as_str()).unwrap_or("");
+
+    // Reject known executable/script extensions as a defense-in-depth measure
+    let lower = path.to_lowercase();
+    let blocked_extensions = [
+        ".exe", ".bat", ".cmd", ".ps1", ".vbs", ".vbe", ".jse",
+        ".wsf", ".wsh", ".msi", ".msp", ".scr", ".com", ".pif", ".hta",
+        ".cpl", ".inf", ".reg",
+    ];
+    for ext in &blocked_extensions {
+        if lower.ends_with(ext) {
+            return Err(format!("Opening files with '{}' extension is not allowed", ext));
+        }
+    }
+
     app.opener().open_path(path, None::<&str>).map_err(|e| e.to_string())
 }
 
