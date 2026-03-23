@@ -19,7 +19,6 @@
 * [🗺️ Roadmap](#️-roadmap)
 * [🚀 Download & Setup](#-download--setup)
   * [Installation Package](#installation-package)
-  * [Package Manager](#package-manager)
 * [🛠️ Development Guide](#️-development-guide)
 * [❓ FAQ](#-faq)
   * [How does Wellspring store data?](#how-does-wellspring-store-data)
@@ -106,16 +105,6 @@ All features are free, including for commercial use.
 ### Installation Package
 
 * [GitHub Releases](https://github.com/sourdusk/wellspring/releases)
-
-### Package Manager
-
-#### `siyuan`
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/siyuan.svg)](https://repology.org/project/siyuan/versions)
-
-#### `siyuan-note`
-
-[![Packaging status](https://repology.org/badge/vertical-allrepos/siyuan-note.svg)](https://repology.org/project/siyuan-note/versions)
 
 ## 🛠️ Development Guide
 
