@@ -1,11 +1,11 @@
 [中文](https://github.com/siyuan-note/siyuan/blob/master/.github/CONTRIBUTING_zh_CN.md)
 
-## Get the source code
+## Get the Source Code
 
 * `git clone git@github.com:siyuan-note/siyuan.git`
-* Switch to dev branch `git checkout dev`
+* Switch to the dev branch: `git checkout dev`
 
-## NPM dependencies
+## NPM Dependencies
 
 Install pnpm: `npm install -g pnpm@10.30.3`
 
@@ -25,18 +25,18 @@ NPM mirror:
 * Revert to using official repository `pnpm --registry https://registry.npmjs.org i`
 </details>
 
-Enter the app folder and execute:
+In the `app/` folder, run:
 
 * `pnpm install electron@40.8.1 -D`
 * `pnpm run dev`
 * `pnpm run start`
 
-Note: In the development environment, the kernel process will not be automatically started, and you need to manually start the kernel process first.
+**Note:** The dev environment does not start the kernel automatically — you need to start it manually first (see below).
 
 ## Kernel
 
-1. Install the latest version of [golang](https://go.dev/)
-2. Open CGO support, that is, configure the environment variable `CGO_ENABLED=1`
+1. Install the latest version of [Go](https://go.dev/)
+2. Enable CGO by setting the environment variable `CGO_ENABLED=1`
 
 ### Desktop
 
@@ -60,15 +60,15 @@ Note: In the development environment, the kernel process will not be automatical
 * `gomobile bind --tags fts5 -ldflags "-s -w"  -v -o kernel.aar -target=android/arm64 -androidapi 26 ./mobile/`
 * https://github.com/siyuan-note/siyuan-android
 
-### Harmony
+### HarmonyOS
 
-Only support compilation under Linux, need to install Harmony SDK, and need to modify Go source code.
+HarmonyOS builds are only supported on Linux. You must install the Harmony SDK and patch the Go source code.
 
 * `cd kernel/harmony`
-* `./build.sh` (`./build-win.sh` for Windows Emulator)
+* `./build.sh` (or `./build-win.sh` for the Windows emulator)
 * https://github.com/siyuan-note/siyuan-harmony
 
-Modify Go source code:
+Required Go source code patches:
 
 1. go/src/runtime/vim tls_arm64.s
 
@@ -76,7 +76,7 @@ Modify Go source code:
 
 2. go/src/runtime/cgo/gcc_android.c
 
-   Clear the inittls function
+   Empty the `inittls` function body
 
    ```c
    inittls(void **tlsg, void **tlsbase)
@@ -87,4 +87,4 @@ Modify Go source code:
 3. go/src/net/cgo_resold.go
    `C.size_t(len(b))` to `C.socklen_t(len(b))`
 
-For other details, please refer to https://github.com/siyuan-note/siyuan/issues/13184
+For more details, see https://github.com/siyuan-note/siyuan/issues/13184

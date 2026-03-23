@@ -14,69 +14,61 @@
 
 * [💡 Introduction](#-introduction)
 * [🔮 Features](#-features)
-* [🏗️ Architecture and Ecosystem](#-architecture-and-ecosystem)
+* [🏗️ Architecture and Ecosystem](#️-architecture-and-ecosystem)
 * [🌟 Star History](#-star-history)
 * [🗺️ Roadmap](#️-roadmap)
-* [🚀 Download Setup](#-download-setup)
-  * [App Market](#app-market)
+* [🚀 Download & Setup](#-download--setup)
   * [Installation Package](#installation-package)
   * [Package Manager](#package-manager)
-  * [Docker Hosting](#docker-hosting)
-  * [Unraid Hosting](#unraid-hosting)
-  * [TrueNAS Hosting](#TrueNAS-hosting)
-  * [Insider Preview](#insider-preview)
-* [🏘️ Community](#️-community)
 * [🛠️ Development Guide](#️-development-guide)
 * [❓ FAQ](#-faq)
   * [How does Wellspring store data?](#how-does-wellspring-store-data)
-  * [Does it support data synchronization through a third-party sync disk?](#does-it-support-data-synchronization-through-a-third-party-sync-disk)
+  * [Does it support file-based synchronization?](#does-it-support-file-based-synchronization)
   * [Is Wellspring open source?](#is-wellspring-open-source)
-  * [How to upgrade to a new version?](#how-to-upgrade-to-a-new-version)
-  * [What if some blocks (such as paragraph blocks in list items) cannot find the block icon?](#what-if-some-blocks-such-as-paragraph-blocks-in-list-items-cannot-find-the-block-icon)
-  * [What should I do if the data repo key is lost?](#what-should-i-do-if-the-data-repo-key-is-lost)
+  * [How do I upgrade to a new version?](#how-do-i-upgrade-to-a-new-version)
+  * [How do I access the block menu for blocks without a visible icon?](#how-do-i-access-the-block-menu-for-blocks-without-a-visible-icon)
+  * [What do I do if I lose my data repo key?](#what-do-i-do-if-i-lose-my-data-repo-key)
   * [Do I need to pay for it?](#do-i-need-to-pay-for-it)
-* [🙏 Acknowledgement](#-acknowledgement)
+* [🙏 Acknowledgements](#-acknowledgements)
   * [Contributors](#contributors)
 
 ---
 
 ## 💡 Introduction
 
-Wellspring is a privacy-first personal knowledge management system, support fine-grained block-level reference and Markdown
-WYSIWYG.
+Wellspring is a privacy-first personal knowledge management system with fine-grained block-level referencing and Markdown WYSIWYG editing.
 
 ## 🔮 Features
 
-Most features are free, even for commercial use.
+All features are free, including for commercial use.
 
-* Content block
-  * Block-level reference and two-way links
+* Content blocks
+  * Block-level references and bidirectional links
   * Custom attributes
-  * SQL query embed
+  * SQL query embeds
   * Protocol `siyuan://`
 * Editor
-  * Block-style
+  * Block-based editing
   * Markdown WYSIWYG
   * List outline
   * Block zoom-in
-  * Million-word large document editing
-  * Mathematical formulas, charts, flowcharts, Gantt charts, timing charts, staffs, etc.
+  * Large document editing (1M+ words)
+  * Math formulas, charts, flowcharts, Gantt charts, sequence diagrams, sheet music, and more
   * Web clipping
-  * PDF Annotation link
+  * PDF annotation linking
 * Export
-  * Block ref and embed
+  * Block references and embeds
   * Standard Markdown with assets
-  * PDF, Word and HTML
-  * Copy to WeChat MP, Zhihu and Yuque
+  * PDF, Word, and HTML
 * Database
   * Table view
 * Flashcard spaced repetition
-* AI writing and Q/A chat via OpenAI API
-* Tesseract OCR 
-* Multi-tab, drag and drop to split screen
-* Template snippet
-* JavaScript/CSS snippet
-* Android/iOS/HarmonyOS App
+* AI writing and Q&A via OpenAI API
+* Tesseract OCR
+* Multi-tab with drag-and-drop split screen
+* Template snippets
+* JavaScript/CSS snippets
+* Android/iOS/HarmonyOS apps
 * Docker deployment
 * [API](https://github.com/sourdusk/wellspring/blob/master/API.md)
 * Community marketplace
@@ -109,13 +101,11 @@ Most features are free, even for commercial use.
 
 * [Wellspring changelog](CHANGELOG.md)
 
-## 🚀 Download Setup
-
-It is recommended to give priority to installing through the application market on the desktop and mobile, so that you can upgrade the version with one click in the future.
+## 🚀 Download & Setup
 
 ### Installation Package
 
-* [GitHub](https://github.com/sourdusk/wellspring/releases)
+* [GitHub Releases](https://github.com/sourdusk/wellspring/releases)
 
 ### Package Manager
 
@@ -129,74 +119,70 @@ It is recommended to give priority to installing through the application market 
 
 ## 🛠️ Development Guide
 
-See [Development Guide](https://github.com/sourdusk/wellspring/blob/master/.github/CONTRIBUTING.md).
+See the [Development Guide](https://github.com/sourdusk/wellspring/blob/master/.github/CONTRIBUTING.md).
 
 ## ❓ FAQ
 
 ### How does Wellspring store data?
 
-The data is saved in the workspace folder, in the workspace data folder:
+Data is stored in the workspace folder under `workspace/data/`:
 
-* `assets` is used to save all inserted assets
-* `emojis` is used to save emoji images
-* `snippets` is used to save code snippets
-* `storage` is used to save query conditions, layouts and flashcards, etc.
-* `templates` is used to save template snippets
-* `widgets` is used to save widgets
-* `plugins` is used to save plugins
-* `public` is used to save public data
-* The rest of the folders are the notebook folders created by the user, files with the suffix of `.sy` in the notebook folder are used to save the document data, and the data format is JSON
+* `assets` — inserted files and images
+* `emojis` — custom emoji images
+* `snippets` — code snippets
+* `storage` — query conditions, layouts, flashcards, etc.
+* `templates` — template snippets
+* `widgets` — widgets
+* `plugins` — plugins
+* `public` — public data
+* All other folders are user-created notebooks. Document files use the `.sy` extension and are stored as JSON.
 
-### Does it support data synchronization through file synchronization?
+### Does it support file-based synchronization?
 
-Due to the fact that the backend for wellspring is a sql database, file synchronization tools like onedrive and syncthing have the capability to break the program.
+No. Wellspring uses a SQLite database internally, so file-sync tools like OneDrive or Syncthing can corrupt the data.
 
-Although file synchronization is not supported, there's an S3 and WebDAV sync feature.
+Instead, use the built-in S3 or WebDAV sync. You can also manually export and import data:
 
-In addition, you can also consider manually exporting and importing data to achieve data synchronization:
-
-* Desktop: <kbd>Settings</kbd> - <kbd>Export</kbd> - <kbd>Export Data</kbd> / <kbd>Import Data</kbd>
-* Mobile: <kbd>Right column</kbd> - <kbd>About</kbd> - <kbd>Export Data</kbd> / <kbd>Import Data</kbd>
+* Desktop: <kbd>Settings</kbd> → <kbd>Export</kbd> → <kbd>Export Data</kbd> / <kbd>Import Data</kbd>
+* Mobile: <kbd>Right column</kbd> → <kbd>About</kbd> → <kbd>Export Data</kbd> / <kbd>Import Data</kbd>
 
 ### Is Wellspring open source?
 
-Wellspring is completely open source, and contributions are welcome:
+Yes, fully open source. Contributions are welcome — see the [Development Guide](https://github.com/sourdusk/wellspring/blob/master/.github/CONTRIBUTING.md).
 
-For more details, please refer to [Development Guide](https://github.com/sourdusk/wellspring/blob/master/.github/CONTRIBUTING.md).
+### How do I upgrade to a new version?
 
-### How to upgrade to a new version?
+* **Desktop (auto-update):** Enable <kbd>Settings</kbd> → <kbd>About</kbd> → <kbd>Automatically download update installation package</kbd>. Wellspring will download new versions and prompt you to install.
+* **Manual install:** Download the latest installation package from [GitHub Releases](https://github.com/sourdusk/wellspring/releases) and install it over the existing version.
 
-* If it is installed through the installation package on the desktop, you can open the option of <kbd>Settings</kbd> - <kbd>About</kbd> - <kbd>Automatically download update installation package</kbd>, so that Wellspring will automatically download The latest version of the installation package and prompts to install
-* If it is installed by manual installation package, please download the installation package again to install
+### How do I access the block menu for blocks without a visible icon?
 
-### What if some blocks (such as paragraph blocks in list items) cannot find the block icon?
+The first sub-block inside a list item doesn't display a block icon. Place your cursor in the block and press <kbd>Ctrl+/</kbd> to open its block menu.
 
-The first sub-block under the list item is the block icon omitted. You can move the cursor into this block and trigger its block menu with <kbd>Ctrl+/</kbd> .
+### What do I do if I lose my data repo key?
 
-### What should I do if the data repo key is lost?
+* If the key was previously set up on multiple devices, it's the same everywhere. Retrieve it from any device via <kbd>Settings</kbd> → <kbd>About</kbd> → <kbd>Data repo key</kbd> → <kbd>Copy key string</kbd>.
+* If the key can't be recovered from any device, reset it:
 
-* If the data repo key is correctly initialized on multiple devices before, the key is the same on all devices and can be set in <kbd>Settings</kbd> - <kbd>About</kbd> - <kbd>Data repo key</kbd> - <kbd>Copy key string</kbd> retrieve
-* If it has not been configured correctly before (for example, the keys on multiple devices are inconsistent) or all devices are unavailable and the key string cannot be obtained, you can reset the key by following the steps below:
-
-  1. Manually back up the data, you can use <kbd>Export Data</kbd> or directly copy the <kbd>workspace/data/</kbd> folder on the file system
-  2. <kbd>Settings</kbd> - <kbd>About</kbd> - <kbd>Data rep key</kbd> - <kbd>Reset data repo</kbd>
-  3. Reinitialize the data repo key. After initializing the key on one device, other devices import the key
-  4. The cloud uses the new synchronization directory, the old synchronization directory is no longer available and can be deleted
-  5. The existing cloud snapshots are no longer available and can be deleted
+  1. Back up your data first — use <kbd>Export Data</kbd> or copy the `workspace/data/` folder directly
+  2. Go to <kbd>Settings</kbd> → <kbd>About</kbd> → <kbd>Data repo key</kbd> → <kbd>Reset data repo</kbd>
+  3. Initialize a new key on one device, then import it on your other devices
+  4. Create a new cloud sync directory (the old one is no longer usable and can be deleted)
+  5. Existing cloud snapshots are no longer usable and can be deleted
 
 ### Do I need to pay for it?
 
-All features are free.
+No. All features are free.
 
-## 🙏 Acknowledgement
+## 🙏 Acknowledgements
 
-The birth of Wellspring is inseparable from many open source projects and contributors, please refer to the project source code kernel/go.mod, app/package.json and project homepage.
+Wellspring is built on the work of many open-source projects and contributors. See `kernel/go.mod`, `app/package.json`, and the project homepage for details.
 
-The growth of Wellspring is inseparable from user feedback and promotion, thank you for everyone's help to Wellspring ❤️
+Thank you to everyone who has contributed feedback and helped spread the word ❤️
 
 ### Contributors
 
-Welcome to join us and contribute code to Wellspring together.
+Contributions are welcome! See the [Development Guide](https://github.com/sourdusk/wellspring/blob/master/.github/CONTRIBUTING.md) to get started.
 
 <a href="https://github.com/sourdusk/wellspring/graphs/contributors">
    <img src="https://contrib.rocks/image?repo=sourdusk/wellspring" />
